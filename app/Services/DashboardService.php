@@ -18,12 +18,14 @@ class DashboardService
 
         $monthlyIncome = $user->transactions()
             ->where('type', 'income')
+            ->whereNull('transfer_id')
             ->whereMonth('date', $month)
             ->whereYear('date', $year)
             ->sum('amount');
 
         $monthlyExpense = $user->transactions()
             ->where('type', 'expense')
+            ->whereNull('transfer_id')
             ->whereMonth('date', $month)
             ->whereYear('date', $year)
             ->sum('amount');
@@ -42,12 +44,14 @@ class DashboardService
         foreach ($months as $m) {
             $income[] = (float) $user->transactions()
                 ->where('type', 'income')
+                ->whereNull('transfer_id')
                 ->whereMonth('date', $m)
                 ->whereYear('date', $year)
                 ->sum('amount');
 
             $expense[] = (float) $user->transactions()
                 ->where('type', 'expense')
+                ->whereNull('transfer_id')
                 ->whereMonth('date', $m)
                 ->whereYear('date', $year)
                 ->sum('amount');
@@ -65,6 +69,7 @@ class DashboardService
         $expenses = $user->transactions()
             ->select('category_id', DB::raw('SUM(amount) as total'))
             ->where('type', 'expense')
+            ->whereNull('transfer_id')
             ->whereMonth('date', $month)
             ->whereYear('date', $year)
             ->groupBy('category_id')
@@ -93,6 +98,7 @@ class DashboardService
             $spent = (float) $user->transactions()
                 ->where('category_id', $budget->category_id)
                 ->where('type', 'expense')
+                ->whereNull('transfer_id')
                 ->whereMonth('date', $month)
                 ->whereYear('date', $year)
                 ->sum('amount');

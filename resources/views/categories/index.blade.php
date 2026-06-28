@@ -1,8 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Categories</h2>
-            <a href="{{ route('categories.create') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">Categories</h2>
+            <a href="{{ route('categories.create') }}" class="bg-gray-900 hover:bg-gray-800 text-white dark:bg-white dark:text-black dark:hover:bg-gray-200 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
                 + New Category
             </a>
         </div>
@@ -11,26 +11,26 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             @if ($categories->isEmpty())
-                <div class="text-center py-12 bg-white rounded-xl shadow-sm border border-gray-200">
-                    <p class="text-gray-500">No categories yet.</p>
+                <div class="text-center py-12 bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-800">
+                    <p class="text-gray-500 dark:text-gray-400">No categories yet.</p>
                 </div>
             @else
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     @foreach ($categories as $category)
-                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 flex items-center justify-between hover:shadow-md transition-shadow">
+                        <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-800 p-4 flex items-center justify-between hover:shadow-md dark:hover:shadow-none dark:hover:border-gray-700 transition-shadow">
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-lg flex items-center justify-center text-white" style="background-color: {{ $category->color ?? '#6B7280' }}">
                                     {{ substr($category->name, 0, 2) }}
                                 </div>
                                 <div>
-                                    <p class="font-medium text-gray-900">{{ $category->name }}</p>
+                                    <p class="font-medium text-gray-900 dark:text-white">{{ $category->name }}</p>
                                     <span class="text-xs {{ $category->type === 'income' ? 'text-green-600' : 'text-red-500' }}">
                                         {{ ucfirst($category->type) }}
                                     </span>
                                 </div>
                             </div>
                             <div class="flex gap-2">
-                                <a href="{{ route('categories.edit', $category) }}" class="text-gray-400 hover:text-indigo-600 transition-colors">
+                                <a href="{{ route('categories.edit', $category) }}" class="text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors">
                                     <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                     </svg>

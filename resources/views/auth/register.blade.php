@@ -31,7 +31,7 @@
         <!-- Currency Preference -->
         <div class="mt-4">
             <x-input-label for="currency_preference" :value="__('Currency')" />
-            <select id="currency_preference" name="currency_preference" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+            <select id="currency_preference" name="currency_preference" class="block mt-1 w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm focus:border-gray-500 dark:focus:border-gray-400 focus:ring-gray-500 dark:focus:ring-gray-400">
                 <option value="USD" {{ old('currency_preference') == 'USD' ? 'selected' : '' }}>USD - US Dollar</option>
                 <option value="IDR" {{ old('currency_preference') == 'IDR' ? 'selected' : '' }}>IDR - Indonesian Rupiah</option>
                 <option value="EUR" {{ old('currency_preference') == 'EUR' ? 'selected' : '' }}>EUR - Euro</option>
@@ -53,7 +53,7 @@
         </div>
 
         <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
+            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:focus:ring-gray-400" href="{{ route('login') }}">
                 {{ __('Already registered?') }}
             </a>
 

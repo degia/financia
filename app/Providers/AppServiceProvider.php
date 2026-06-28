@@ -2,23 +2,35 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use App\Models\Account;
+use App\Models\Budget;
+use App\Models\Category;
+use App\Models\Goal;
+use App\Models\Transaction;
+use App\Policies\AccountPolicy;
+use App\Policies\BudgetPolicy;
+use App\Policies\CategoryPolicy;
+use App\Policies\GoalPolicy;
+use App\Policies\TransactionPolicy;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
+    protected $policies = [
+        Account::class => AccountPolicy::class,
+        Category::class => CategoryPolicy::class,
+        Budget::class => BudgetPolicy::class,
+        Transaction::class => TransactionPolicy::class,
+        Goal::class => GoalPolicy::class,
+    ];
+
     public function register(): void
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
-        //
+        $this->registerPolicies();
     }
 }

@@ -10,6 +10,7 @@ class Transaction extends Model
         'user_id',
         'account_id',
         'category_id',
+        'transfer_id',
         'amount',
         'type',
         'description',
@@ -40,5 +41,15 @@ class Transaction extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function transfer()
+    {
+        return $this->belongsTo(Transaction::class, 'transfer_id');
+    }
+
+    public function transfers()
+    {
+        return $this->hasMany(Transaction::class, 'transfer_id');
     }
 }

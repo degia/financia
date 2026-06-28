@@ -1,11 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Add Transaction</h2>
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">Add Transaction</h2>
     </x-slot>
 
     <div class="py-6">
         <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-800 p-6">
                 <form method="POST" action="{{ route('transactions.store') }}">
                     @csrf
 
@@ -14,11 +14,11 @@
                         <div class="mt-1 flex gap-4">
                             <label class="inline-flex items-center">
                                 <input type="radio" name="type" value="expense" class="text-red-500 focus:ring-red-500" {{ old('type', 'expense') == 'expense' ? 'checked' : '' }}>
-                                <span class="ml-2 text-sm text-gray-700">Expense</span>
+                                <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Expense</span>
                             </label>
                             <label class="inline-flex items-center">
                                 <input type="radio" name="type" value="income" class="text-green-500 focus:ring-green-500" {{ old('type') == 'income' ? 'checked' : '' }}>
-                                <span class="ml-2 text-sm text-gray-700">Income</span>
+                                <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Income</span>
                             </label>
                         </div>
                         <x-input-error :messages="$errors->get('type')" class="mt-2" />
@@ -26,7 +26,7 @@
 
                     <div class="mb-4">
                         <x-input-label for="account_id" :value="__('Account')" />
-                        <select id="account_id" name="account_id" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                        <select id="account_id" name="account_id" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 rounded-md shadow-sm focus:border-gray-500 dark:focus:border-gray-400 focus:ring-gray-500 dark:focus:ring-gray-400">
                             <option value="">Select account...</option>
                             @foreach ($accounts as $account)
                                 <option value="{{ $account->id }}" {{ old('account_id') == $account->id ? 'selected' : '' }}>
@@ -39,7 +39,7 @@
 
                     <div class="mb-4">
                         <x-input-label for="category_id" :value="__('Category')" />
-                        <select id="category_id" name="category_id" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                        <select id="category_id" name="category_id" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 rounded-md shadow-sm focus:border-gray-500 dark:focus:border-gray-400 focus:ring-gray-500 dark:focus:ring-gray-400">
                             <option value="">Select category...</option>
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}" data-type="{{ $category->type }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
@@ -70,7 +70,7 @@
 
                     <div class="flex items-center gap-4 mt-6">
                         <x-primary-button>{{ __('Save Transaction') }}</x-primary-button>
-                        <a href="{{ route('transactions.index') }}" class="text-gray-600 hover:text-gray-900 text-sm">Cancel</a>
+                        <a href="{{ route('transactions.index') }}" class="text-gray-600 dark:text-gray-400 dark:hover:text-white text-sm">Cancel</a>
                     </div>
                 </form>
             </div>

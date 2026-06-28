@@ -25,6 +25,8 @@ class CategorySeeder extends Seeder
             ['name' => 'Freelance', 'type' => 'income', 'icon' => 'laptop', 'color' => '#14B8A6'],
             ['name' => 'Investment', 'type' => 'income', 'icon' => 'trending-up', 'color' => '#6366F1'],
             ['name' => 'Other Income', 'type' => 'income', 'icon' => 'plus-circle', 'color' => '#6B7280'],
+            ['name' => 'Transfer', 'type' => 'expense', 'icon' => 'arrow-right-left', 'color' => '#6366F1'],
+            ['name' => 'Transfer', 'type' => 'income', 'icon' => 'arrow-right-left', 'color' => '#6366F1'],
         ];
 
         foreach ($categories as $category) {
