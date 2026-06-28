@@ -28,6 +28,19 @@
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
+        <!-- Currency Preference -->
+        <div class="mt-4">
+            <x-input-label for="currency_preference" :value="__('Currency')" />
+            <select id="currency_preference" name="currency_preference" class="block mt-1 w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                <option value="USD" {{ old('currency_preference') == 'USD' ? 'selected' : '' }}>USD - US Dollar</option>
+                <option value="IDR" {{ old('currency_preference') == 'IDR' ? 'selected' : '' }}>IDR - Indonesian Rupiah</option>
+                <option value="EUR" {{ old('currency_preference') == 'EUR' ? 'selected' : '' }}>EUR - Euro</option>
+                <option value="SGD" {{ old('currency_preference') == 'SGD' ? 'selected' : '' }}>SGD - Singapore Dollar</option>
+                <option value="MYR" {{ old('currency_preference') == 'MYR' ? 'selected' : '' }}>MYR - Malaysian Ringgit</option>
+            </select>
+            <x-input-error :messages="$errors->get('currency_preference')" class="mt-2" />
+        </div>
+
         <!-- Confirm Password -->
         <div class="mt-4">
             <x-input-label for="password_confirmation" :value="__('Confirm Password')" />

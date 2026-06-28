@@ -34,13 +34,27 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'currency_preference' => ['required', 'string', 'size:3'],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'currency_preference' => $request->currency_preference,
         ]);
+
+        // Copy system categories to the new user
+        $systemCategories = \App\Models\Category::whereNull('user_id')->where('is_system', true)->get();
+        foreach ($systemCategories as $cat) {
+            $user->categories()->create([
+                'name' => $cat->name,
+                'type' => $cat->type,
+                'icon' => $cat->icon,
+                'color' => $cat->color,
+                'is_system' => true,
+            ]);
+        }
 
         event(new Registered($user));
 
