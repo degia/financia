@@ -28,7 +28,10 @@ class TransferController extends Controller
             'amount' => ['required', 'numeric', 'min:0.01'],
             'description' => ['nullable', 'string', 'max:255'],
             'date' => ['nullable', 'date'],
+            'is_savings' => ['nullable', 'boolean'],
         ]);
+
+        $data['is_savings'] = $request->boolean('is_savings');
 
         $this->transferService->transfer($request->user(), $data);
 

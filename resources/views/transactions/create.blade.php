@@ -5,8 +5,19 @@
 
     <div class="py-6">
         <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-800 p-6">
-                <form method="POST" action="{{ route('transactions.store') }}">
+            <div class="card p-6">
+                <form method="POST" action="{{ route('transactions.store') }}"
+                      x-data="{
+                          catId: '{{ old('category_id') }}',
+                          filterSubs() {
+                              this.$nextTick(() => {
+                                  document.querySelectorAll('[data-sub-cat]').forEach(el => {
+                                      el.style.display = el.dataset.categoryId == this.catId ? '' : 'none'
+                                  })
+                              })
+                          }
+                      }"
+                      x-init="filterSubs()">
                     @csrf
 
                     <div class="mb-4">
@@ -39,7 +50,9 @@
 
                     <div class="mb-4">
                         <x-input-label for="category_id" :value="__('Category')" />
-                        <select id="category_id" name="category_id" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 rounded-md shadow-sm focus:border-gray-500 dark:focus:border-gray-400 focus:ring-gray-500 dark:focus:ring-gray-400">
+                        <select id="category_id" name="category_id" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 rounded-md shadow-sm focus:border-gray-500 dark:focus:border-gray-400 focus:ring-gray-500 dark:focus:ring-gray-400"
+                                x-model="catId"
+                                @change="filterSubs()">
                             <option value="">Select category...</option>
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}" data-type="{{ $category->type }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
@@ -48,6 +61,24 @@
                             @endforeach
                         </select>
                         <x-input-error :messages="$errors->get('category_id')" class="mt-2" />
+                    </div>
+
+                    <div class="mb-4">
+                        <x-input-label for="sub_category_id" :value="__('Sub-Category')" />
+                        <select id="sub_category_id" name="sub_category_id" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 rounded-md shadow-sm focus:border-gray-500 dark:focus:border-gray-400 focus:ring-gray-500 dark:focus:ring-gray-400">
+                            <option value="">None</option>
+                            @foreach ($categories as $category)
+                                @foreach ($category->subCategories as $sub)
+                                    <option value="{{ $sub->id }}"
+                                        data-sub-cat
+                                        data-category-id="{{ $category->id }}"
+                                        {{ old('sub_category_id') == $sub->id ? 'selected' : '' }}>
+                                        {{ $sub->name }}
+                                    </option>
+                                @endforeach
+                            @endforeach
+                        </select>
+                        <x-input-error :messages="$errors->get('sub_category_id')" class="mt-2" />
                     </div>
 
                     <div class="mb-4">

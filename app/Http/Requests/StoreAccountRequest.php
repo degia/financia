@@ -15,10 +15,12 @@ class StoreAccountRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'type' => ['required', 'string', 'in:cash,bank,ewallet,credit_card'],
+            'type' => ['required', 'string', 'in:cash,bank,ewallet,credit_card,savings'],
+            'category' => ['required', 'string', 'in:real,savings,subscriptions'],
             'initial_balance' => ['nullable', 'numeric', 'min:0'],
             'currency' => ['nullable', 'string', 'size:3'],
             'color' => ['nullable', 'string', 'max:7'],
+            'icon' => ['nullable', 'string', 'max:50'],
         ];
     }
 }

@@ -25,14 +25,19 @@ class DashboardService
 
         $monthlyExpense = $user->transactions()
             ->where('type', 'expense')
-            ->whereNull('transfer_id')
+            ->where(function ($q) {
+                $q->whereNull('transfer_id')->orWhere('is_savings', true);
+            })
             ->whereMonth('date', $month)
             ->whereYear('date', $year)
             ->sum('amount');
 
         $netSavings = $monthlyIncome - $monthlyExpense;
 
-        return compact('totalBalance', 'monthlyIncome', 'monthlyExpense', 'netSavings', 'accounts');
+        $realBalance = (float) $accounts->where('category', '!=', 'savings')->sum('current_balance');
+        $savingsBalance = (float) $accounts->where('category', 'savings')->sum('current_balance');
+
+        return compact('totalBalance', 'realBalance', 'savingsBalance', 'monthlyIncome', 'monthlyExpense', 'netSavings', 'accounts');
     }
 
     public function getMonthlyChart(User $user, int $year): array
@@ -51,7 +56,9 @@ class DashboardService
 
             $expense[] = (float) $user->transactions()
                 ->where('type', 'expense')
-                ->whereNull('transfer_id')
+                ->where(function ($q) {
+                    $q->whereNull('transfer_id')->orWhere('is_savings', true);
+                })
                 ->whereMonth('date', $m)
                 ->whereYear('date', $year)
                 ->sum('amount');
@@ -69,7 +76,9 @@ class DashboardService
         $expenses = $user->transactions()
             ->select('category_id', DB::raw('SUM(amount) as total'))
             ->where('type', 'expense')
-            ->whereNull('transfer_id')
+            ->where(function ($q) {
+                $q->whereNull('transfer_id')->orWhere('is_savings', true);
+            })
             ->whereMonth('date', $month)
             ->whereYear('date', $year)
             ->groupBy('category_id')
@@ -98,7 +107,9 @@ class DashboardService
             $spent = (float) $user->transactions()
                 ->where('category_id', $budget->category_id)
                 ->where('type', 'expense')
-                ->whereNull('transfer_id')
+                ->where(function ($q) {
+                    $q->whereNull('transfer_id')->orWhere('is_savings', true);
+                })
                 ->whereMonth('date', $month)
                 ->whereYear('date', $year)
                 ->sum('amount');
@@ -115,5 +126,35 @@ class DashboardService
         }
 
         return $progress;
+    }
+
+    public function getSavingsSummary(User $user, int $month, int $year): array
+    {
+        $totalSavings = (float) $user->transactions()
+            ->where('type', 'expense')
+            ->where('is_savings', true)
+            ->sum('amount');
+
+        $monthlySavings = (float) $user->transactions()
+            ->where('type', 'expense')
+            ->where('is_savings', true)
+            ->whereMonth('date', $month)
+            ->whereYear('date', $year)
+            ->sum('amount');
+
+        $savingsCategoryTotal = (float) $user->transactions()
+            ->where('type', 'expense')
+            ->whereHas('category', fn($q) => $q->where('name', 'Savings'))
+            ->whereNull('transfer_id')
+            ->sum('amount');
+
+        return [
+            'totalSaved' => $totalSavings + $savingsCategoryTotal,
+            'monthlySavings' => $monthlySavings,
+            'savingsCount' => $user->transactions()
+                ->where('type', 'expense')
+                ->where('is_savings', true)
+                ->count(),
+        ];
     }
 }

@@ -24,7 +24,8 @@ class AccountController extends Controller
 
     public function create(): View
     {
-        return view('accounts.create');
+        $institutions = config('institutions');
+        return view('accounts.create', compact('institutions'));
     }
 
     public function store(StoreAccountRequest $request): RedirectResponse
@@ -33,9 +34,11 @@ class AccountController extends Controller
             'user_id' => $request->user()->id,
             'name' => $request->name,
             'type' => $request->type,
+            'category' => $request->category,
             'initial_balance' => $request->initial_balance ?? 0,
             'currency' => $request->currency ?? $request->user()->currency_preference,
             'color' => $request->color ?? '#6366F1',
+            'icon' => $request->icon,
         ]);
 
         return redirect()->route('accounts.index')->with('success', 'Account created successfully.');
@@ -44,7 +47,8 @@ class AccountController extends Controller
     public function edit(Account $account): View
     {
         $this->authorize('update', $account);
-        return view('accounts.edit', compact('account'));
+        $institutions = config('institutions');
+        return view('accounts.edit', compact('account', 'institutions'));
     }
 
     public function update(UpdateAccountRequest $request, Account $account): RedirectResponse

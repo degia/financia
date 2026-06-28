@@ -16,6 +16,7 @@ class StoreTransactionRequest extends FormRequest
         return [
             'account_id' => ['required', 'exists:accounts,id'],
             'category_id' => ['required', 'exists:categories,id'],
+            'sub_category_id' => ['nullable', 'exists:sub_categories,id'],
             'amount' => ['required', 'numeric', 'min:0'],
             'type' => ['required', 'string', 'in:income,expense'],
             'description' => ['nullable', 'string', 'max:255'],

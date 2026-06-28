@@ -22,6 +22,7 @@ class DashboardController extends Controller
         $monthlyChart = $this->dashboardService->getMonthlyChart($user, $year);
         $categoryBreakdown = $this->dashboardService->getCategoryBreakdown($user, $month, $year);
         $budgetProgress = $this->dashboardService->getBudgetsProgress($user, $month, $year);
+        $savings = $this->dashboardService->getSavingsSummary($user, $month, $year);
         $recentTransactions = $user->transactions()
             ->with(['account', 'category'])
             ->orderBy('date', 'desc')
@@ -34,6 +35,7 @@ class DashboardController extends Controller
             'monthlyChart',
             'categoryBreakdown',
             'budgetProgress',
+            'savings',
             'recentTransactions',
             'month',
             'year'

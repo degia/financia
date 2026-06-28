@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">Accounts</h2>
-            <a href="{{ route('accounts.create') }}" class="bg-gray-900 hover:bg-gray-800 text-white dark:bg-white dark:text-black dark:hover:bg-gray-200 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+            <a href="{{ route('accounts.create') }}" class="btn-primary">
                 + New Account
             </a>
         </div>
@@ -11,7 +11,7 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             @if ($accounts->isEmpty())
-                <div class="text-center py-12 bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-800">
+                <div class="text-center py-12 card">
                     <div class="text-gray-400 dark:text-gray-500 mb-4">
                         <svg class="mx-auto h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
@@ -19,22 +19,27 @@
                     </div>
                     <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No accounts yet</h3>
                     <p class="text-gray-500 dark:text-gray-400 mb-6">Create your first account to start tracking your finances.</p>
-                    <a href="{{ route('accounts.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white dark:bg-white dark:text-black dark:hover:bg-gray-200 rounded-lg transition-colors">
+                    <a href="{{ route('accounts.create') }}" class="btn-primary">
                         + Create Account
                     </a>
                 </div>
             @else
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach ($accounts as $account)
-                        <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-800 p-6 hover:shadow-md dark:hover:shadow-none dark:hover:border-gray-700 transition-shadow">
+                        <div class="card p-6 hover:shadow-md dark:hover:shadow-none dark:hover:border-gray-700 transition-shadow">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-full flex items-center justify-center text-white text-lg" style="background-color: {{ $account->color ?? '#6366F1' }}">
-                                        {{ substr($account->name, 0, 1) }}
-                                    </div>
+                                    <x-institution-logo :slug="$account->icon" :size="40" :fallback-name="$account->name" :fallback-color="$account->color ?? '#6366F1'" />
                                     <div>
                                         <h3 class="font-semibold text-gray-900 dark:text-white">{{ $account->name }}</h3>
-                                        <span class="text-xs text-gray-500 dark:text-gray-400 capitalize">{{ str_replace('_', ' ', $account->type) }}</span>
+                                        @php
+                                            $typeLabels = ['cash' => 'Cash', 'bank' => 'Bank', 'ewallet' => 'E-Wallet', 'credit_card' => 'Credit Card', 'savings' => 'Savings'];
+                                            $typeColors = ['cash' => 'text-green-600', 'bank' => 'text-blue-600', 'ewallet' => 'text-orange-600', 'credit_card' => 'text-red-600', 'savings' => 'text-violet-600'];
+                                        @endphp
+                                        <span class="text-xs font-medium {{ $typeColors[$account->type] ?? 'text-gray-500' }}">{{ $typeLabels[$account->type] ?? $account->type }}</span>
+                                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium {{ $account->category === 'savings' ? 'bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300' : ($account->category === 'subscriptions' ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400') }}">
+                                            {{ ucfirst($account->category) }}
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="flex gap-2">

@@ -41,4 +41,9 @@ class Category extends Model
     {
         return $this->hasMany(Budget::class);
     }
+
+    public function subCategories()
+    {
+        return $this->hasMany(SubCategory::class)->orderBy('name');
+    }
 }

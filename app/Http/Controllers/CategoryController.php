@@ -18,7 +18,7 @@ class CategoryController extends Controller
 
     public function index(Request $request): View
     {
-        $categories = $request->user()->categories()->orderBy('type')->orderBy('name')->get();
+        $categories = $request->user()->categories()->with('subCategories')->orderBy('type')->orderBy('name')->get();
         return view('categories.index', compact('categories'));
     }
 
@@ -42,6 +42,7 @@ class CategoryController extends Controller
     public function edit(Category $category): View
     {
         $this->authorize('update', $category);
+        $category->load('subCategories');
         return view('categories.edit', compact('category'));
     }
 

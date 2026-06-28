@@ -37,7 +37,9 @@ class BudgetService
             $spent = (float) $user->transactions()
                 ->where('category_id', $budget->category_id)
                 ->where('type', 'expense')
-                ->whereNull('transfer_id')
+                ->where(function ($q) {
+                    $q->whereNull('transfer_id')->orWhere('is_savings', true);
+                })
                 ->whereMonth('date', $month)
                 ->whereYear('date', $year)
                 ->sum('amount');

@@ -10,7 +10,9 @@ class Transaction extends Model
         'user_id',
         'account_id',
         'category_id',
+        'sub_category_id',
         'transfer_id',
+        'is_savings',
         'amount',
         'type',
         'description',
@@ -41,6 +43,11 @@ class Transaction extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function subCategory()
+    {
+        return $this->belongsTo(SubCategory::class);
     }
 
     public function transfer()

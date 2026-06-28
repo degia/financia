@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">Categories</h2>
-            <a href="{{ route('categories.create') }}" class="bg-gray-900 hover:bg-gray-800 text-white dark:bg-white dark:text-black dark:hover:bg-gray-200 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+            <a href="{{ route('categories.create') }}" class="btn-primary">
                 + New Category
             </a>
         </div>
@@ -11,41 +11,54 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             @if ($categories->isEmpty())
-                <div class="text-center py-12 bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-800">
+                <div class="text-center py-12 card">
                     <p class="text-gray-500 dark:text-gray-400">No categories yet.</p>
                 </div>
             @else
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     @foreach ($categories as $category)
-                        <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-800 p-4 flex items-center justify-between hover:shadow-md dark:hover:shadow-none dark:hover:border-gray-700 transition-shadow">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-lg flex items-center justify-center text-white" style="background-color: {{ $category->color ?? '#6B7280' }}">
-                                    {{ substr($category->name, 0, 2) }}
+                        <div class="card p-4 hover:shadow-md dark:hover:shadow-none dark:hover:border-gray-700 transition-shadow">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-lg flex items-center justify-center text-white" style="background-color: {{ $category->color ?? '#6B7280' }}">
+                                        {{ substr($category->name, 0, 2) }}
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-900 dark:text-white">{{ $category->name }}</p>
+                                        <span class="text-xs {{ $category->type === 'income' ? 'text-green-600' : 'text-red-500' }}">
+                                            {{ ucfirst($category->type) }}
+                                        </span>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p class="font-medium text-gray-900 dark:text-white">{{ $category->name }}</p>
-                                    <span class="text-xs {{ $category->type === 'income' ? 'text-green-600' : 'text-red-500' }}">
-                                        {{ ucfirst($category->type) }}
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="flex gap-2">
-                                <a href="{{ route('categories.edit', $category) }}" class="text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors">
-                                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg>
-                                </a>
-                                @if (!$category->is_system)
-                                <form method="POST" action="{{ route('categories.destroy', $category) }}" onsubmit="return confirm('Delete this category?')">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="text-gray-400 hover:text-red-600 transition-colors">
+                                <div class="flex gap-2">
+                                    <a href="{{ route('categories.edit', $category) }}" class="text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors">
                                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
-                                    </button>
-                                </form>
-                                @endif
+                                    </a>
+                                    @if (!$category->is_system)
+                                    <form method="POST" action="{{ route('categories.destroy', $category) }}" onsubmit="return confirm('Delete this category?')">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="text-gray-400 hover:text-red-600 transition-colors">
+                                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
+                                    </form>
+                                    @endif
+                                </div>
                             </div>
+                            @if ($category->subCategories->isNotEmpty())
+                                <div class="mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
+                                    <div class="flex flex-wrap gap-1.5">
+                                        @foreach ($category->subCategories as $sub)
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
+                                                {{ $sub->name }}
+                                            </span>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     @endforeach
                 </div>

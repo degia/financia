@@ -19,7 +19,7 @@ class TransactionController extends Controller
     public function index(Request $request): View
     {
         $query = $request->user()->transactions()
-            ->with(['account', 'category'])
+            ->with(['account', 'category', 'subCategory'])
             ->orderBy('date', 'desc')
             ->orderBy('created_at', 'desc');
 
@@ -44,7 +44,7 @@ class TransactionController extends Controller
 
         $transactions = $query->paginate(15);
         $accounts = $request->user()->accounts;
-        $categories = $request->user()->categories;
+        $categories = $request->user()->categories()->with('subCategories')->get();
 
         return view('transactions.index', compact('transactions', 'accounts', 'categories'));
     }
@@ -52,7 +52,7 @@ class TransactionController extends Controller
     public function create(Request $request): View
     {
         $accounts = $request->user()->accounts;
-        $categories = $request->user()->categories()->orderBy('type')->orderBy('name')->get();
+        $categories = $request->user()->categories()->with('subCategories')->orderBy('type')->orderBy('name')->get();
         return view('transactions.create', compact('accounts', 'categories'));
     }
 
@@ -62,6 +62,7 @@ class TransactionController extends Controller
             'user_id' => $request->user()->id,
             'account_id' => $request->account_id,
             'category_id' => $request->category_id,
+            'sub_category_id' => $request->sub_category_id,
             'amount' => $request->amount,
             'type' => $request->type,
             'description' => $request->description,
@@ -75,7 +76,7 @@ class TransactionController extends Controller
     {
         $this->authorize('update', $transaction);
         $accounts = $request->user()->accounts;
-        $categories = $request->user()->categories()->orderBy('type')->orderBy('name')->get();
+        $categories = $request->user()->categories()->with('subCategories')->orderBy('type')->orderBy('name')->get();
         return view('transactions.edit', compact('transaction', 'accounts', 'categories'));
     }
 

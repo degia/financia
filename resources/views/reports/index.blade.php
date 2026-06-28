@@ -6,7 +6,7 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {{-- Filters --}}
-            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-800 p-4 mb-6">
+            <div class="card p-4 mb-6">
                 <form method="GET" class="flex flex-wrap gap-4 items-end">
                     <div>
                         <x-input-label for="start_date" :value="__('From')" />
@@ -44,23 +44,23 @@
                     </div>
                     <div class="flex gap-2">
                         <x-primary-button class="px-4 py-2 text-sm">Generate</x-primary-button>
-                        <a href="{{ route('reports.export.csv', request()->query()) }}" class="px-4 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">CSV</a>
-                        <a href="{{ route('reports.export.pdf', request()->query()) }}" class="px-4 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">PDF</a>
+                        <a href="{{ route('reports.export.csv', request()->query()) }}" class="btn-success">CSV</a>
+                        <a href="{{ route('reports.export.pdf', request()->query()) }}" class="btn-danger">PDF</a>
                     </div>
                 </form>
             </div>
 
             {{-- Summary --}}
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-800 p-5">
+                <div class="card p-5">
                     <p class="text-sm text-gray-500 dark:text-gray-400">Total Income</p>
                     <p class="text-2xl font-bold text-green-600">+{{ number_format($totalIncome, 2) }}</p>
                 </div>
-                <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-800 p-5">
+                <div class="card p-5">
                     <p class="text-sm text-gray-500 dark:text-gray-400">Total Expense</p>
                     <p class="text-2xl font-bold text-red-600">-{{ number_format($totalExpense, 2) }}</p>
                 </div>
-                <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-800 p-5">
+                <div class="card p-5">
                     <p class="text-sm text-gray-500 dark:text-gray-400">Net</p>
                     <p class="text-2xl font-bold {{ ($totalIncome - $totalExpense) >= 0 ? 'text-green-600' : 'text-red-600' }}">
                         {{ ($totalIncome - $totalExpense) >= 0 ? '+' : '' }}{{ number_format($totalIncome - $totalExpense, 2) }}
@@ -70,7 +70,7 @@
 
             {{-- Category Breakdown --}}
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-800 p-5">
+                <div class="card p-5">
                     <h3 class="font-semibold text-gray-900 dark:text-white mb-3">Expense by Category</h3>
                     @if ($categoryReport['expenses']->isEmpty())
                         <p class="text-gray-500 dark:text-gray-400 text-sm">No expenses in this period.</p>
@@ -91,7 +91,7 @@
                         </div>
                     @endif
                 </div>
-                <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-800 p-5">
+                <div class="card p-5">
                     <h3 class="font-semibold text-gray-900 dark:text-white mb-3">Income by Category</h3>
                     @if ($categoryReport['incomes']->isEmpty())
                         <p class="text-gray-500 dark:text-gray-400 text-sm">No income in this period.</p>
@@ -115,7 +115,7 @@
             </div>
 
             {{-- Transactions Table --}}
-            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-800 overflow-hidden">
+            <div class="card overflow-hidden">
                 <div class="p-5 border-b border-gray-200 dark:border-gray-800">
                     <h3 class="font-semibold text-gray-900 dark:text-white">Transaction Details</h3>
                 </div>

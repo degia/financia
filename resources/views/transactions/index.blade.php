@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">Transactions</h2>
-            <a href="{{ route('transactions.create') }}" class="bg-gray-900 hover:bg-gray-800 text-white dark:bg-white dark:text-black dark:hover:bg-gray-200 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+            <a href="{{ route('transactions.create') }}" class="btn-primary">
                 + Add Transaction
             </a>
         </div>
@@ -11,7 +11,7 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {{-- Filters --}}
-            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-800 p-4 mb-6">
+            <div class="card p-4 mb-6">
                 <form method="GET" action="{{ route('transactions.index') }}" class="flex flex-wrap gap-4 items-end">
                     <div>
                         <x-input-label for="start_date" :value="__('From')" />
@@ -53,23 +53,24 @@
                     </div>
                     <div class="flex gap-2">
                         <x-primary-button class="px-4 py-2 text-sm">Filter</x-primary-button>
-                        <a href="{{ route('transactions.index') }}" class="px-4 py-2 text-sm bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Clear</a>
+                        <a href="{{ route('transactions.index') }}" class="btn-secondary">Clear</a>
                     </div>
                 </form>
             </div>
 
             @if ($transactions->isEmpty())
-                <div class="text-center py-12 bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-800">
+                <div class="text-center py-12 card">
                     <p class="text-gray-500 dark:text-gray-400">No transactions found.</p>
                 </div>
             @else
-                <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-800 overflow-hidden">
+                <div class="card overflow-hidden">
                     <table class="w-full">
                         <thead class="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-800">
                             <tr>
                                 <th class="text-left px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Date</th>
                                 <th class="text-left px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Description</th>
                                 <th class="text-left px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Category</th>
+                                <th class="text-left px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Sub</th>
                                 <th class="text-left px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Account</th>
                                 <th class="text-right px-4 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Amount</th>
                                 <th class="px-4 py-3"></th>
@@ -85,10 +86,13 @@
                                             {{ $transaction->category->name }}
                                         </span>
                                     </td>
+                                    <td class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">{{ $transaction->subCategory->name ?? '-' }}</td>
                                     <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">{{ $transaction->account->name }}</td>
-                                    <td class="px-4 py-3 text-sm font-bold text-right {{ $transaction->transfer_id ? 'text-gray-500' : ($transaction->type === 'income' ? 'text-green-600' : 'text-red-600') }}">
+                                    <td class="px-4 py-3 text-sm font-bold text-right {{ $transaction->transfer_id ? ($transaction->is_savings ? 'text-purple-600 dark:text-purple-400' : 'text-gray-500') : ($transaction->type === 'income' ? 'text-green-600' : 'text-red-600') }}">
                                         @if ($transaction->transfer_id)
-                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 mr-1">↔ Transfer</span>
+                                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium mr-1 {{ $transaction->is_savings ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400' }}">
+                                                {{ $transaction->is_savings ? '💰 Savings' : '↔ Transfer' }}
+                                            </span>
                                         @endif
                                         {{ $transaction->type === 'income' ? '+' : '-' }}{{ number_format($transaction->amount, 2) }}
                                     </td>

@@ -5,7 +5,7 @@
 
     <div class="py-6">
         <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-800 p-6">
+            <div class="card p-6">
                 <form method="POST" action="{{ route('budgets.store') }}">
                     @csrf
 

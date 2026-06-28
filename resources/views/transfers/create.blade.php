@@ -43,7 +43,7 @@
 
                     <div class="mb-4">
                         <x-input-label for="description" :value="__('Description (optional)')" />
-                        <x-text-input id="description" class="input-field mt-1" type="text" name="description" :value="old('description')" placeholder="e.g. Savings transfer" />
+                        <x-text-input id="description" class="input-field mt-1" type="text" name="description" :value="old('description')" placeholder="e.g. Monthly savings" />
                         <x-input-error :messages="$errors->get('description')" class="mt-2" />
                     </div>
 
@@ -51,6 +51,17 @@
                         <x-input-label for="date" :value="__('Date')" />
                         <x-text-input id="date" class="input-field mt-1" type="date" name="date" :value="old('date', now()->format('Y-m-d'))" />
                         <x-input-error :messages="$errors->get('date')" class="mt-2" />
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="inline-flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" name="is_savings" value="1" {{ old('is_savings') ? 'checked' : '' }}
+                                class="w-5 h-5 rounded border-gray-300 dark:border-gray-700 text-gray-900 focus:ring-gray-500 dark:focus:ring-gray-400 dark:bg-gray-800">
+                            <div>
+                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Treat as savings expense</span>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">This transfer will be recorded as an expense for budgeting purposes.</p>
+                            </div>
+                        </label>
                     </div>
 
                     <div class="flex items-center gap-4 mt-6">

@@ -10,6 +10,7 @@ class Account extends Model
         'user_id',
         'name',
         'type',
+        'category',
         'initial_balance',
         'current_balance',
         'currency',

@@ -27,8 +27,17 @@ class TransferService
                 abort(422, 'Cannot transfer to the same account.');
             }
 
+            if ($fromAccount->current_balance < $data['amount']) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'amount' => 'Insufficient balance. Available: ' . number_format($fromAccount->current_balance, 2),
+                ]);
+            }
+
+            $isSavings = $data['is_savings'] ?? false;
+
+            $expenseCategoryName = $isSavings ? 'Savings' : 'Transfer';
             $transferExpense = Category::where('user_id', $user->id)
-                ->where('name', 'Transfer')
+                ->where('name', $expenseCategoryName)
                 ->where('type', 'expense')
                 ->firstOrFail();
 
@@ -46,8 +55,9 @@ class TransferService
                 'category_id' => $transferExpense->id,
                 'amount' => $data['amount'],
                 'type' => 'expense',
-                'description' => 'Transfer to ' . $toAccount->name . ($description !== 'Transfer' ? ': ' . $description : ''),
+                'description' => ($isSavings ? 'Savings: ' : 'Transfer to ') . $toAccount->name . ($description !== 'Transfer' ? ': ' . $description : ''),
                 'date' => $date,
+                'is_savings' => $isSavings,
             ]);
 
             $incoming = Transaction::create([
@@ -56,7 +66,7 @@ class TransferService
                 'category_id' => $transferIncome->id,
                 'amount' => $data['amount'],
                 'type' => 'income',
-                'description' => 'Transfer from ' . $fromAccount->name . ($description !== 'Transfer' ? ': ' . $description : ''),
+                'description' => ($isSavings ? 'Savings from ' : 'Transfer from ') . $fromAccount->name . ($description !== 'Transfer' ? ': ' . $description : ''),
                 'date' => $date,
             ]);
 

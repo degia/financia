@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">Budgets</h2>
-            <a href="{{ route('budgets.create') }}" class="bg-gray-900 hover:bg-gray-800 text-white dark:bg-white dark:text-black dark:hover:bg-gray-200 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+            <a href="{{ route('budgets.create') }}" class="btn-primary">
                 + New Budget
             </a>
         </div>
@@ -11,7 +11,7 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {{-- Period Filter --}}
-            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-800 p-4 mb-6">
+            <div class="card p-4 mb-6">
                 <form method="GET" class="flex gap-4 items-end">
                     <div>
                         <x-input-label for="month" :value="__('Month')" />
@@ -36,7 +36,7 @@
             </div>
 
             @if (empty($budgets))
-                <div class="text-center py-12 bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-800">
+                <div class="text-center py-12 card">
                     <p class="text-gray-500 dark:text-gray-400">No budgets set for this period.</p>
                 </div>
             @else
@@ -54,7 +54,7 @@
                                 'exceeded' => 'bg-red-500',
                             ];
                         @endphp
-                        <div class="bg-white dark:bg-gray-900 rounded-xl shadow-sm dark:shadow-none border border-gray-200 dark:border-gray-800 p-5">
+                        <div class="card p-5">
                             <div class="flex justify-between items-start mb-3">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 rounded-lg flex items-center justify-center text-white" style="background-color: {{ $budget->category->color ?? '#6B7280' }}">

@@ -20,6 +20,7 @@ class CategorySeeder extends Seeder
             ['name' => 'Entertainment', 'type' => 'expense', 'icon' => 'film', 'color' => '#3B82F6'],
             ['name' => 'Health', 'type' => 'expense', 'icon' => 'heart', 'color' => '#EC4899'],
             ['name' => 'Education', 'type' => 'expense', 'icon' => 'book', 'color' => '#8B5CF6'],
+            ['name' => 'Savings', 'type' => 'expense', 'icon' => 'piggy-bank', 'color' => '#8B5CF6'],
             ['name' => 'Other Expense', 'type' => 'expense', 'icon' => 'credit-card', 'color' => '#6B7280'],
             ['name' => 'Salary', 'type' => 'income', 'icon' => 'briefcase', 'color' => '#22C55E'],
             ['name' => 'Freelance', 'type' => 'income', 'icon' => 'laptop', 'color' => '#14B8A6'],

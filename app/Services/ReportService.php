@@ -22,7 +22,9 @@ class ReportService
 
             $expense = (float) $user->transactions()
                 ->where('type', 'expense')
-                ->whereNull('transfer_id')
+                ->where(function ($q) {
+                    $q->whereNull('transfer_id')->orWhere('is_savings', true);
+                })
                 ->whereMonth('date', $month)
                 ->whereYear('date', $year)
                 ->sum('amount');
@@ -44,7 +46,9 @@ class ReportService
         $expenses = $user->transactions()
             ->select('category_id', DB::raw('SUM(amount) as total'), DB::raw('COUNT(*) as count'))
             ->where('type', 'expense')
-            ->whereNull('transfer_id')
+            ->where(function ($q) {
+                $q->whereNull('transfer_id')->orWhere('is_savings', true);
+            })
             ->whereBetween('date', [$startDate, $endDate])
             ->groupBy('category_id')
             ->with('category')
@@ -91,8 +95,10 @@ class ReportService
 
         $transactions = $query->get();
 
-        $totalIncome = $transactions->where('type', 'income')->sum('amount');
-        $totalExpense = $transactions->where('type', 'expense')->sum('amount');
+        $totalIncome = $transactions->where('type', 'income')->whereNull('transfer_id')->sum('amount');
+        $totalExpense = $transactions->where('type', 'expense')->filter(function ($t) {
+            return is_null($t->transfer_id) || $t->is_savings;
+        })->sum('amount');
 
         return compact('transactions', 'totalIncome', 'totalExpense');
     }
