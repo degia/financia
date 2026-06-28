@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::post('/accounts/reconcile', [AccountController::class, 'reconcile'])->name('accounts.reconcile');
     Route::resource('accounts', AccountController::class)->except(['show']);
     Route::resource('categories', CategoryController::class)->except(['show']);
     Route::resource('transactions', TransactionController::class)->except(['show']);

@@ -9,6 +9,7 @@ use App\Services\AccountService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
 
 class AccountController extends Controller
 {
@@ -76,5 +77,20 @@ class AccountController extends Controller
         $this->authorize('delete', $account);
         $this->accountService->deleteAccount($account);
         return redirect()->route('accounts.index')->with('success', 'Account deleted successfully.');
+    }
+
+    public function reconcile(Request $request): RedirectResponse
+    {
+        $accounts = $request->user()->accounts;
+        $count = 0;
+
+        DB::transaction(function () use ($accounts, &$count) {
+            foreach ($accounts as $account) {
+                $this->accountService->recalculateBalance($account);
+                $count++;
+            }
+        });
+
+        return redirect()->route('accounts.index')->with('success', "{$count} account(s) reconciled successfully.");
     }
 }

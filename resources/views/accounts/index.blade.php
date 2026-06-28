@@ -10,6 +10,21 @@
 
     <div class="py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            @if (session('success'))
+                <div class="card p-4 mb-6 border-l-4 border-l-green-500 bg-green-50 dark:bg-green-900/20">
+                    <p class="text-sm text-green-700 dark:text-green-300">{{ session('success') }}</p>
+                </div>
+            @endif
+
+            @if ($accounts->isNotEmpty())
+                <div class="flex justify-end mb-4">
+                    <form method="POST" action="{{ route('accounts.reconcile') }}">
+                        @csrf
+                        <button type="submit" class="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white underline">Reconcile Balances</button>
+                    </form>
+                </div>
+            @endif
+
             @if ($accounts->isEmpty())
                 <div class="text-center py-12 card">
                     <div class="text-gray-400 dark:text-gray-500 mb-4">
