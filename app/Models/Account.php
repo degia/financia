@@ -8,6 +8,7 @@ class Account extends Model
 {
     protected $fillable = [
         'user_id',
+        'institution_id',
         'name',
         'type',
         'category',
@@ -34,5 +35,10 @@ class Account extends Model
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    public function institution()
+    {
+        return $this->belongsTo(Institution::class);
     }
 }

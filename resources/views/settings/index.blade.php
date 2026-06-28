@@ -91,6 +91,15 @@
                     <x-primary-button>{{ __('Save Settings') }}</x-primary-button>
                 </div>
             </form>
+
+            {{-- Institutions Management --}}
+            <div class="card p-6 mt-6">
+                <h3 class="font-semibold text-gray-900 dark:text-white mb-2">Institutions Management</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Manage bank, e-wallet, and other financial institution brands and logos.</p>
+                <a href="{{ route('institutions.index') }}" class="btn-secondary text-sm">
+                    Manage Institutions
+                </a>
+            </div>
         </div>
     </div>
 </x-app-layout>

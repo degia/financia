@@ -20,6 +20,7 @@ class UpdateAccountRequest extends FormRequest
             'currency' => ['nullable', 'string', 'size:3'],
             'color' => ['nullable', 'string', 'max:7'],
             'icon' => ['nullable', 'string', 'max:50'],
+            'institution_id' => ['nullable', 'exists:institutions,id'],
         ];
     }
 }

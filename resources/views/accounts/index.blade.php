@@ -29,7 +29,11 @@
                         <div class="card p-6 hover:shadow-md dark:hover:shadow-none dark:hover:border-gray-700 transition-shadow">
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-center gap-3">
-                                    <x-institution-logo :slug="$account->icon" :size="40" :fallback-name="$account->name" :fallback-color="$account->color ?? '#6366F1'" />
+                                    @if ($account->institution && $account->institution->logo_url)
+                                        <img src="{{ $account->institution->logo_url }}" alt="{{ $account->institution->name }}" class="w-10 h-10 object-contain rounded-lg">
+                                    @else
+                                        <x-institution-logo :slug="$account->icon" :size="40" :fallback-name="$account->name" :fallback-color="$account->color ?? '#6366F1'" />
+                                    @endif
                                     <div>
                                         <h3 class="font-semibold text-gray-900 dark:text-white">{{ $account->name }}</h3>
                                         @php

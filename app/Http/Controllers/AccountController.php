@@ -18,13 +18,19 @@ class AccountController extends Controller
 
     public function index(Request $request): View
     {
-        $accounts = $request->user()->accounts()->orderBy('created_at', 'desc')->get();
+        $accounts = $request->user()->accounts()->with('institution')->orderBy('created_at', 'desc')->get();
         return view('accounts.index', compact('accounts'));
     }
 
     public function create(): View
     {
-        $institutions = config('institutions');
+        $institutions = \App\Models\Institution::where('is_active', true)->orderBy('type')->orderBy('name')->get()->map(fn($i) => [
+            'id' => $i->id,
+            'name' => $i->name,
+            'type' => $i->type,
+            'color' => $i->color,
+            'logo_url' => $i->logo_url,
+        ]);
         return view('accounts.create', compact('institutions'));
     }
 
@@ -32,6 +38,7 @@ class AccountController extends Controller
     {
         $this->accountService->createAccount([
             'user_id' => $request->user()->id,
+            'institution_id' => $request->institution_id,
             'name' => $request->name,
             'type' => $request->type,
             'category' => $request->category,
@@ -47,7 +54,13 @@ class AccountController extends Controller
     public function edit(Account $account): View
     {
         $this->authorize('update', $account);
-        $institutions = config('institutions');
+        $institutions = \App\Models\Institution::where('is_active', true)->orderBy('type')->orderBy('name')->get()->map(fn($i) => [
+            'id' => $i->id,
+            'name' => $i->name,
+            'type' => $i->type,
+            'color' => $i->color,
+            'logo_url' => $i->logo_url,
+        ]);
         return view('accounts.edit', compact('account', 'institutions'));
     }
 
