@@ -2,11 +2,16 @@
 
 namespace App\Models;
 
+use Database\Factories\InstitutionFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
 class Institution extends Model
 {
+    /** @use HasFactory<InstitutionFactory> */
+    use HasFactory;
+
     protected $fillable = [
         'name',
         'type',

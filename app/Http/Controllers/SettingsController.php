@@ -20,6 +20,7 @@ class SettingsController extends Controller
             'categories' => 'Categories',
             'budgets' => 'Budgets',
             'goals' => 'Goals',
+            'loans' => 'Loans',
             'reports' => 'Reports',
         ];
         return view('settings.index', compact('accounts', 'menus'));
@@ -32,7 +33,7 @@ class SettingsController extends Controller
         $request->validate([
             'currency_preference' => ['required', 'string', 'size:3'],
             'menu_visibility' => ['nullable', 'array'],
-            'menu_visibility.*' => ['string', 'in:dashboard,accounts,transactions,transfers,categories,budgets,goals,reports'],
+            'menu_visibility.*' => ['string', 'in:dashboard,accounts,transactions,transfers,categories,budgets,goals,loans,reports'],
             'default_account_id' => ['nullable', 'exists:accounts,id', function ($attr, $val, $fail) use ($user) {
                 if ($val && !$user->accounts()->where('id', $val)->exists()) {
                     $fail('The selected account is invalid.');
@@ -52,7 +53,7 @@ class SettingsController extends Controller
 
         $user->currency_preference = $request->currency_preference;
 
-        $allMenus = ['dashboard', 'accounts', 'transactions', 'transfers', 'categories', 'budgets', 'goals', 'reports'];
+        $allMenus = ['dashboard', 'accounts', 'transactions', 'transfers', 'categories', 'budgets', 'goals', 'loans', 'reports'];
         $visible = $request->menu_visibility ?? [];
         $user->setPreference('menu_visibility', array_combine(
             $allMenus,

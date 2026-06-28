@@ -46,6 +46,11 @@
                         {{ __('Goals') }}
                     </x-nav-link>
                     @endif
+                    @if ($navVisible['loans'] ?? true)
+                    <x-nav-link :href="route('loans.index')" :active="request()->routeIs('loans.*')">
+                        {{ __('Loans') }}
+                    </x-nav-link>
+                    @endif
                     @if ($navVisible['reports'] ?? true)
                     <x-nav-link :href="route('reports.index')" :active="request()->routeIs('reports.*')">
                         {{ __('Reports') }}
@@ -150,6 +155,11 @@
             @if ($navVisible['goals'] ?? true)
             <x-responsive-nav-link :href="route('goals.index')" :active="request()->routeIs('goals.*')">
                 {{ __('Goals') }}
+            </x-responsive-nav-link>
+            @endif
+            @if ($navVisible['loans'] ?? true)
+            <x-responsive-nav-link :href="route('loans.index')" :active="request()->routeIs('loans.*')">
+                {{ __('Loans') }}
             </x-responsive-nav-link>
             @endif
             @if ($navVisible['reports'] ?? true)
