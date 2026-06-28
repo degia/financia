@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GoalController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('budgets', BudgetController::class)->except(['show']);
     Route::resource('goals', GoalController::class)->except(['show']);
     Route::post('/goals/{goal}/contribute', [GoalController::class, 'contribute'])->name('goals.contribute');
+
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/export/csv', [ReportController::class, 'exportCsv'])->name('reports.export.csv');
+    Route::get('/reports/export/pdf', [ReportController::class, 'exportPdf'])->name('reports.export.pdf');
 });
 
 require __DIR__.'/auth.php';
