@@ -17,6 +17,7 @@ class Transaction extends Model
         'category_id',
         'sub_category_id',
         'transfer_id',
+        'loan_id',
         'is_savings',
         'amount',
         'type',
@@ -63,5 +64,15 @@ class Transaction extends Model
     public function transfers()
     {
         return $this->hasMany(Transaction::class, 'transfer_id');
+    }
+
+    public function loan()
+    {
+        return $this->belongsTo(Loan::class);
+    }
+
+    public function loanPayment()
+    {
+        return $this->hasOne(LoanPayment::class, 'transaction_id');
     }
 }

@@ -30,6 +30,7 @@ class TransactionTest extends TestCase
             'category_id',
             'sub_category_id',
             'transfer_id',
+            'loan_id',
             'is_savings',
             'amount',
             'type',

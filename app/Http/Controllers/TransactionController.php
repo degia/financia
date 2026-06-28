@@ -67,6 +67,7 @@ class TransactionController extends Controller
             'type' => $request->type,
             'description' => $request->description,
             'date' => $request->date,
+            'loan_id' => $request->loan_id,
         ]);
 
         return redirect()->route('transactions.index')->with('success', 'Transaction created successfully.');

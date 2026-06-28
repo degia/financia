@@ -9,6 +9,7 @@
                 <form method="POST" action="{{ route('transactions.store') }}"
                       x-data="{
                           catId: '{{ old('category_id') }}',
+                          transactionType: '{{ old('type', 'expense') }}',
                           filterSubs() {
                               this.$nextTick(() => {
                                   document.querySelectorAll('[data-sub-cat]').forEach(el => {
@@ -24,11 +25,11 @@
                         <x-input-label for="type" :value="__('Type')" />
                         <div class="mt-1 flex gap-4">
                             <label class="inline-flex items-center">
-                                <input type="radio" name="type" value="expense" class="text-red-500 focus:ring-red-500" {{ old('type', 'expense') == 'expense' ? 'checked' : '' }}>
+                                <input type="radio" name="type" value="expense" class="text-red-500 focus:ring-red-500" {{ old('type', 'expense') == 'expense' ? 'checked' : '' }} @change="transactionType = 'expense'">
                                 <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Expense</span>
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="radio" name="type" value="income" class="text-green-500 focus:ring-green-500" {{ old('type') == 'income' ? 'checked' : '' }}>
+                                <input type="radio" name="type" value="income" class="text-green-500 focus:ring-green-500" {{ old('type') == 'income' ? 'checked' : '' }} @change="transactionType = 'income'">
                                 <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Income</span>
                             </label>
                         </div>
@@ -97,6 +98,20 @@
                         <x-input-label for="date" :value="__('Date')" />
                         <x-text-input id="date" class="block mt-1 w-full" type="date" name="date" :value="old('date', date('Y-m-d'))" required />
                         <x-input-error :messages="$errors->get('date')" class="mt-2" />
+                    </div>
+
+                    <div class="mb-4" x-show="transactionType === 'expense'" x-cloak>
+                        <x-input-label for="loan_id" :value="__('Loan Payment')" />
+                        <select id="loan_id" name="loan_id" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 rounded-md shadow-sm focus:border-gray-500 dark:focus:border-gray-400 focus:ring-gray-500 dark:focus:ring-gray-400">
+                            <option value="">-- Not a loan payment --</option>
+                            @foreach (Auth::user()->loans()->where('type', 'borrow')->where('status', 'active')->orderBy('name')->get() as $loan)
+                                <option value="{{ $loan->id }}" {{ old('loan_id') == $loan->id ? 'selected' : '' }}>
+                                    {{ $loan->name }} (remaining: {{ number_format($loan->remaining_amount, 2) }})
+                                </option>
+                            @endforeach
+                        </select>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Only for expense transactions paying off a loan.</p>
+                        <x-input-error :messages="$errors->get('loan_id')" class="mt-2" />
                     </div>
 
                     <div class="flex items-center gap-4 mt-6">

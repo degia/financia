@@ -21,6 +21,7 @@ class UpdateTransactionRequest extends FormRequest
             'type' => ['required', 'string', 'in:income,expense'],
             'description' => ['nullable', 'string', 'max:255'],
             'date' => ['required', 'date'],
+            'loan_id' => ['nullable', 'exists:loans,id'],
         ];
     }
 }
