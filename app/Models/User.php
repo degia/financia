@@ -30,7 +30,20 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'preferences' => 'array',
         ];
+    }
+
+    public function preference(string $key, mixed $default = null): mixed
+    {
+        return data_get($this->preferences, $key, $default);
+    }
+
+    public function setPreference(string $key, mixed $value): void
+    {
+        $prefs = $this->preferences ?? [];
+        data_set($prefs, $key, $value);
+        $this->preferences = $prefs;
     }
 
     public function accounts()

@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GoalController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TransferController;
@@ -40,6 +41,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/sub-categories', [SubCategoryController::class, 'store'])->name('sub-categories.store');
     Route::put('/sub-categories/{subCategory}', [SubCategoryController::class, 'update'])->name('sub-categories.update');
     Route::delete('/sub-categories/{subCategory}', [SubCategoryController::class, 'destroy'])->name('sub-categories.destroy');
+
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+    Route::patch('/settings', [SettingsController::class, 'update'])->name('settings.update');
 });
 
 require __DIR__.'/auth.php';

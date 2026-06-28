@@ -8,31 +8,49 @@
                     </a>
                 </div>
 
+                @php $navVisible = Auth::user()->preference('menu_visibility', []); @endphp
+
                 <div class="hidden space-x-1 sm:-my-px sm:ms-8 sm:flex">
+                    @if ($navVisible['dashboard'] ?? true)
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    @endif
+                    @if ($navVisible['accounts'] ?? true)
                     <x-nav-link :href="route('accounts.index')" :active="request()->routeIs('accounts.*')">
                         {{ __('Accounts') }}
                     </x-nav-link>
+                    @endif
+                    @if ($navVisible['transactions'] ?? true)
                     <x-nav-link :href="route('transactions.index')" :active="request()->routeIs('transactions.*')">
                         {{ __('Transactions') }}
                     </x-nav-link>
+                    @endif
+                    @if ($navVisible['transfers'] ?? true)
                     <x-nav-link :href="route('transfers.create')" :active="request()->routeIs('transfers.*')">
                         {{ __('Transfer') }}
                     </x-nav-link>
+                    @endif
+                    @if ($navVisible['categories'] ?? true)
                     <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
                         {{ __('Categories') }}
                     </x-nav-link>
+                    @endif
+                    @if ($navVisible['budgets'] ?? true)
                     <x-nav-link :href="route('budgets.index')" :active="request()->routeIs('budgets.*')">
                         {{ __('Budgets') }}
                     </x-nav-link>
+                    @endif
+                    @if ($navVisible['goals'] ?? true)
                     <x-nav-link :href="route('goals.index')" :active="request()->routeIs('goals.*')">
                         {{ __('Goals') }}
                     </x-nav-link>
+                    @endif
+                    @if ($navVisible['reports'] ?? true)
                     <x-nav-link :href="route('reports.index')" :active="request()->routeIs('reports.*')">
                         {{ __('Reports') }}
                     </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -59,6 +77,10 @@
                     </x-slot>
 
                     <x-slot name="content">
+                        <x-dropdown-link :href="route('settings.index')">
+                            {{ __('Settings') }}
+                        </x-dropdown-link>
+
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
                         </x-dropdown-link>
@@ -95,30 +117,46 @@
 
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
+            @if ($navVisible['dashboard'] ?? true)
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            @endif
+            @if ($navVisible['accounts'] ?? true)
             <x-responsive-nav-link :href="route('accounts.index')" :active="request()->routeIs('accounts.*')">
                 {{ __('Accounts') }}
             </x-responsive-nav-link>
+            @endif
+            @if ($navVisible['transactions'] ?? true)
             <x-responsive-nav-link :href="route('transactions.index')" :active="request()->routeIs('transactions.*')">
                 {{ __('Transactions') }}
             </x-responsive-nav-link>
+            @endif
+            @if ($navVisible['transfers'] ?? true)
             <x-responsive-nav-link :href="route('transfers.create')" :active="request()->routeIs('transfers.*')">
                 {{ __('Transfer') }}
             </x-responsive-nav-link>
+            @endif
+            @if ($navVisible['categories'] ?? true)
             <x-responsive-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
                 {{ __('Categories') }}
             </x-responsive-nav-link>
+            @endif
+            @if ($navVisible['budgets'] ?? true)
             <x-responsive-nav-link :href="route('budgets.index')" :active="request()->routeIs('budgets.*')">
                 {{ __('Budgets') }}
             </x-responsive-nav-link>
+            @endif
+            @if ($navVisible['goals'] ?? true)
             <x-responsive-nav-link :href="route('goals.index')" :active="request()->routeIs('goals.*')">
                 {{ __('Goals') }}
             </x-responsive-nav-link>
+            @endif
+            @if ($navVisible['reports'] ?? true)
             <x-responsive-nav-link :href="route('reports.index')" :active="request()->routeIs('reports.*')">
                 {{ __('Reports') }}
             </x-responsive-nav-link>
+            @endif
         </div>
 
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-800">
@@ -128,6 +166,10 @@
             </div>
 
             <div class="mt-3 space-y-1">
+                <x-responsive-nav-link :href="route('settings.index')">
+                    {{ __('Settings') }}
+                </x-responsive-nav-link>
+
                 <x-responsive-nav-link :href="route('profile.edit')">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
