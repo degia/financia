@@ -20,6 +20,7 @@ class DashboardController extends Controller
 
         $summary = $this->dashboardService->getSummary($user, $month, $year);
         $monthlyChart = $this->dashboardService->getMonthlyChart($user, $year);
+        $dailyChart = $this->dashboardService->getDailyChart($user, $month, $year);
         $categoryBreakdown = $this->dashboardService->getCategoryBreakdown($user, $month, $year);
         $budgetProgress = $this->dashboardService->getBudgetsProgress($user, $month, $year);
         $savings = $this->dashboardService->getSavingsSummary($user, $month, $year);
@@ -33,6 +34,7 @@ class DashboardController extends Controller
         return view('dashboard', compact(
             'summary',
             'monthlyChart',
+            'dailyChart',
             'categoryBreakdown',
             'budgetProgress',
             'savings',

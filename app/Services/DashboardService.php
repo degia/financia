@@ -128,6 +128,51 @@ class DashboardService
         return $progress;
     }
 
+    public function getDailyChart(User $user, int $month, int $year): array
+    {
+        $daysInMonth = now()->setYear($year)->setMonth($month)->daysInMonth;
+
+        $transactions = $user->transactions()
+            ->select(DB::raw('DAYOFMONTH(date) as day'), 'type', DB::raw('SUM(amount) as total'))
+            ->whereNull('transfer_id')
+            ->whereMonth('date', $month)
+            ->whereYear('date', $year)
+            ->groupBy('day', 'type')
+            ->orderBy('day')
+            ->get();
+
+        $income = array_fill(1, $daysInMonth, 0);
+        $expense = array_fill(1, $daysInMonth, 0);
+
+        foreach ($transactions as $t) {
+            $day = (int) $t->day;
+            if ($t->type === 'income') {
+                $income[$day] += (float) $t->total;
+            } else {
+                $expense[$day] += (float) $t->total;
+            }
+        }
+
+        $labels = [];
+        $incomeData = [];
+        $expenseData = [];
+        $daily = [];
+
+        for ($d = 1; $d <= $daysInMonth; $d++) {
+            $labels[] = (string) $d;
+            $incomeData[] = $income[$d];
+            $expenseData[] = $expense[$d];
+            $daily[] = [
+                'day' => $d,
+                'income' => $income[$d],
+                'expense' => $expense[$d],
+                'net' => $income[$d] - $expense[$d],
+            ];
+        }
+
+        return compact('labels', 'incomeData', 'expenseData', 'daily');
+    }
+
     public function getSavingsSummary(User $user, int $month, int $year): array
     {
         $totalSavings = (float) $user->transactions()

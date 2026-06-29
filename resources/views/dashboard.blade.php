@@ -2,10 +2,29 @@
     <x-slot name="header">
         <div class="flex flex-wrap items-center gap-4">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-white leading-tight">Dashboard</h2>
+            @php
+                $todayIncome = 0;
+                $todayExpense = 0;
+                if ($month == now()->month && $year == now()->year) {
+                    $todayIdx = now()->day - 1;
+                    if (isset($dailyChart['daily'][$todayIdx])) {
+                        $todayIncome = $dailyChart['daily'][$todayIdx]['income'];
+                        $todayExpense = $dailyChart['daily'][$todayIdx]['expense'];
+                    }
+                }
+            @endphp
             <div class="hidden sm:flex items-center gap-3 px-4 py-1.5 bg-gray-100 dark:bg-gray-800 rounded-lg">
                 <span class="text-xs text-gray-500 dark:text-gray-400">Real Balance</span>
                 <span class="text-sm font-bold text-gray-900 dark:text-white">{{ number_format($summary['realBalance'], 2) }}</span>
                 <span class="text-[10px] text-gray-400 dark:text-gray-500">(excl. savings)</span>
+            </div>
+            <div class="hidden sm:flex items-center gap-3 px-4 py-1.5 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                <span class="text-xs text-gray-500 dark:text-gray-400">Today Income</span>
+                <span class="text-sm font-bold text-green-600">+{{ number_format($todayIncome, 2) }}</span>
+            </div>
+            <div class="hidden sm:flex items-center gap-3 px-4 py-1.5 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                <span class="text-xs text-gray-500 dark:text-gray-400">Today Expense</span>
+                <span class="text-sm font-bold text-red-600">-{{ number_format($todayExpense, 2) }}</span>
             </div>
             <form method="GET" class="flex gap-2 items-center ms-auto">
                 <select name="month" class="border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 rounded-md shadow-sm text-xs focus:border-gray-500 dark:focus:border-gray-400 focus:ring-gray-500 dark:focus:ring-gray-400">
@@ -144,6 +163,78 @@
                             data-colors='@json($categoryBreakdown["colors"])'>
                         </canvas>
                     </div>
+                </div>
+            </div>
+
+            {{-- Daily Income vs Expense --}}
+            <div class="card p-5 mb-6">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Daily Income vs Expense ({{ Carbon\Carbon::create()->month($month)->format('F Y') }})</h3>
+                    <div class="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+                        <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-sm bg-green-500"></span> Income</span>
+                        <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-sm bg-red-500"></span> Expense</span>
+                    </div>
+                </div>
+                <div class="h-72">
+                    <canvas id="dailyChart"
+                        data-labels='@json($dailyChart["labels"])'
+                        data-income='@json($dailyChart["incomeData"])'
+                        data-expense='@json($dailyChart["expenseData"])'>
+                    </canvas>
+                </div>
+            </div>
+
+            {{-- Daily Breakdown Table --}}
+            <div class="card p-5 mb-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Daily Breakdown</h3>
+                    <div class="text-xs text-gray-500 dark:text-gray-400">
+                        <span>Total Income: <span class="font-semibold text-green-600">+{{ number_format(array_sum($dailyChart['incomeData']), 2) }}</span></span>
+                        <span class="ms-3">Total Expense: <span class="font-semibold text-red-600">-{{ number_format(array_sum($dailyChart['expenseData']), 2) }}</span></span>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="text-left text-xs text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
+                                <th class="pb-2 font-medium">Date</th>
+                                <th class="pb-2 font-medium text-right">Income</th>
+                                <th class="pb-2 font-medium text-right">Expense</th>
+                                <th class="pb-2 font-medium text-right">Net</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+                            @foreach ($dailyChart['daily'] as $d)
+                                @php $dateObj = Carbon\Carbon::create($year, $month, $d['day']); @endphp
+                                <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                    <td class="py-2 text-gray-700 dark:text-gray-300">
+                                        <span class="font-medium">{{ $dateObj->format('j') }}</span>
+                                        <span class="text-gray-400 dark:text-gray-500 text-xs ms-1">{{ $dateObj->format('D') }}</span>
+                                    </td>
+                                    <td class="py-2 text-right {{ $d['income'] > 0 ? 'text-green-600 font-medium' : 'text-gray-400 dark:text-gray-500' }}">
+                                        {{ $d['income'] > 0 ? '+' . number_format($d['income'], 2) : '-' }}
+                                    </td>
+                                    <td class="py-2 text-right {{ $d['expense'] > 0 ? 'text-red-600 font-medium' : 'text-gray-400 dark:text-gray-500' }}">
+                                        {{ $d['expense'] > 0 ? '-' . number_format($d['expense'], 2) : '-' }}
+                                    </td>
+                                    <td class="py-2 text-right font-medium {{ $d['net'] > 0 ? 'text-green-600' : ($d['net'] < 0 ? 'text-red-600' : 'text-gray-400 dark:text-gray-500') }}">
+                                        {{ $d['net'] != 0 ? ($d['net'] > 0 ? '+' : '') . number_format($d['net'], 2) : '-' }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                        <tfoot>
+                            <tr class="border-t-2 border-gray-300 dark:border-gray-600 font-semibold text-gray-900 dark:text-white">
+                                <td class="pt-2">Total</td>
+                                <td class="pt-2 text-right text-green-600">+{{ number_format(array_sum($dailyChart['incomeData']), 2) }}</td>
+                                <td class="pt-2 text-right text-red-600">-{{ number_format(array_sum($dailyChart['expenseData']), 2) }}</td>
+                                <td class="pt-2 text-right {{ array_sum($dailyChart['incomeData']) - array_sum($dailyChart['expenseData']) >= 0 ? 'text-green-600' : 'text-red-600' }}">
+                                    @php $netTotal = array_sum($dailyChart['incomeData']) - array_sum($dailyChart['expenseData']); @endphp
+                                    {{ $netTotal >= 0 ? '+' : '' }}{{ number_format($netTotal, 2) }}
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
 

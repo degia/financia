@@ -16,6 +16,14 @@ document.addEventListener('DOMContentLoaded', function () {
         const colors = JSON.parse(categoryCanvas.dataset.colors || '[]');
         initCategoryChart(categoryCanvas, labels, data, colors);
     }
+
+    const dailyCanvas = document.getElementById('dailyChart');
+    if (dailyCanvas) {
+        const labels = JSON.parse(dailyCanvas.dataset.labels || '[]');
+        const income = JSON.parse(dailyCanvas.dataset.income || '[]');
+        const expense = JSON.parse(dailyCanvas.dataset.expense || '[]');
+        initDailyChart(dailyCanvas, labels, income, expense);
+    }
 });
 
 function initMonthlyChart(ctx, labels, income, expense) {
@@ -48,6 +56,56 @@ function initMonthlyChart(ctx, labels, income, expense) {
             },
             scales: {
                 y: { beginAtZero: true },
+            },
+        },
+    });
+}
+
+function initDailyChart(ctx, labels, income, expense) {
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Income',
+                    data: income,
+                    backgroundColor: 'rgba(34, 197, 94, 0.7)',
+                    borderColor: 'rgb(34, 197, 94)',
+                    borderWidth: 1,
+                    borderRadius: 2,
+                },
+                {
+                    label: 'Expense',
+                    data: expense,
+                    backgroundColor: 'rgba(239, 68, 68, 0.7)',
+                    borderColor: 'rgb(239, 68, 68)',
+                    borderWidth: 1,
+                    borderRadius: 2,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            return context.dataset.label + ': ' + context.raw.toLocaleString('en-US', { minimumFractionDigits: 2 });
+                        },
+                    },
+                },
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { maxTicksLimit: 31 },
+                },
+                y: {
+                    beginAtZero: true,
+                },
             },
         },
     });
