@@ -71,7 +71,7 @@ class DashboardService
         ];
     }
 
-    public function getCategoryBreakdown(User $user, int $month, int $year): array
+    public function getCategoryBreakdown(User $user, int $month, int $year, array $categoryIds = []): array
     {
         $expenses = $user->transactions()
             ->select('category_id', DB::raw('SUM(amount) as total'))
@@ -81,6 +81,7 @@ class DashboardService
             })
             ->whereMonth('date', $month)
             ->whereYear('date', $year)
+            ->when($categoryIds, fn($q) => $q->whereIn('category_id', $categoryIds))
             ->groupBy('category_id')
             ->with('category')
             ->get();

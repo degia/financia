@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Services\DashboardService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -17,11 +18,12 @@ class DashboardController extends Controller
         $user = $request->user();
         $month = (int) $request->get('month', now()->month);
         $year = (int) $request->get('year', now()->year);
+        $selectedCategories = $request->get('categories', []);
 
         $summary = $this->dashboardService->getSummary($user, $month, $year);
         $monthlyChart = $this->dashboardService->getMonthlyChart($user, $year);
         $dailyChart = $this->dashboardService->getDailyChart($user, $month, $year);
-        $categoryBreakdown = $this->dashboardService->getCategoryBreakdown($user, $month, $year);
+        $categoryBreakdown = $this->dashboardService->getCategoryBreakdown($user, $month, $year, $selectedCategories);
         $budgetProgress = $this->dashboardService->getBudgetsProgress($user, $month, $year);
         $savings = $this->dashboardService->getSavingsSummary($user, $month, $year);
         $recentTransactions = $user->transactions()
@@ -29,6 +31,11 @@ class DashboardController extends Controller
             ->orderBy('date', 'desc')
             ->orderBy('created_at', 'desc')
             ->take(10)
+            ->get();
+
+        $categories = Category::forUser($user->id)
+            ->where('type', 'expense')
+            ->orderBy('name')
             ->get();
 
         return view('dashboard', compact(
@@ -39,6 +46,8 @@ class DashboardController extends Controller
             'budgetProgress',
             'savings',
             'recentTransactions',
+            'categories',
+            'selectedCategories',
             'month',
             'year'
         ));

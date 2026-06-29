@@ -26,7 +26,7 @@
                 <span class="text-xs text-gray-500 dark:text-gray-400">Today Expense</span>
                 <span class="text-sm font-bold text-red-600">-{{ number_format($todayExpense, 2) }}</span>
             </div>
-            <form method="GET" class="flex gap-2 items-center ms-auto">
+            <form id="dashboard-filters" method="GET" class="flex gap-2 items-center ms-auto">
                 <select name="month" class="border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 rounded-md shadow-sm text-xs focus:border-gray-500 dark:focus:border-gray-400 focus:ring-gray-500 dark:focus:ring-gray-400">
                     @foreach (range(1, 12) as $m)
                         <option value="{{ $m }}" {{ $month == $m ? 'selected' : '' }}>{{ Carbon\Carbon::create()->month($m)->format('F') }}</option>
@@ -37,7 +37,7 @@
                         <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
                     @endforeach
                 </select>
-                <x-primary-button class="text-xs px-2.5 py-1.5">Go</x-primary-button>
+                <x-primary-button class="text-xs px-2.5 py-1.5">Apply</x-primary-button>
             </form>
         </div>
     </x-slot>
@@ -155,7 +155,34 @@
                     </div>
                 </div>
                 <div class="card p-5">
-                    <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Expense by Category ({{ Carbon\Carbon::create()->month($month)->format('M Y') }})</h3>
+                    <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
+                        <h3 class="font-semibold text-gray-900 dark:text-white">Expense by Category ({{ Carbon\Carbon::createFromDate($year, $month, 1)->format('M Y') }})</h3>
+                        @if ($categories->isNotEmpty())
+                            <details class="relative text-xs">
+                                <summary class="cursor-pointer text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white select-none">
+                                    Filter Categories &blacktriangledown;
+                                </summary>
+                                <div class="absolute right-0 top-full mt-1 z-10 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-3 min-w-[180px] space-y-1.5">
+                                    @foreach ($categories as $cat)
+                                        <label class="flex items-center gap-2 cursor-pointer hover:opacity-80">
+                                            <input type="checkbox" name="categories[]" value="{{ $cat->id }}"
+                                                form="dashboard-filters"
+                                                {{ in_array((string) $cat->id, $selectedCategories) || empty($selectedCategories) ? 'checked' : '' }}
+                                                class="rounded border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 focus:ring-gray-500 dark:focus:ring-gray-400">
+                                            <span class="w-2.5 h-2.5 rounded-full flex-shrink-0" style="background: {{ $cat->color ?? '#6B7280' }}"></span>
+                                            <span class="text-gray-700 dark:text-gray-300">{{ $cat->name }}</span>
+                                        </label>
+                                    @endforeach
+                                    <div class="pt-2 border-t border-gray-200 dark:border-gray-700">
+                                        <button type="submit" form="dashboard-filters"
+                                            class="w-full text-xs px-3 py-1.5 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors">
+                                            Apply
+                                        </button>
+                                    </div>
+                                </div>
+                            </details>
+                        @endif
+                    </div>
                     <div class="h-64">
                         <canvas id="categoryChart"
                             data-labels='@json($categoryBreakdown["labels"])'
@@ -163,6 +190,9 @@
                             data-colors='@json($categoryBreakdown["colors"])'>
                         </canvas>
                     </div>
+                    @if (empty($categoryBreakdown['labels']))
+                        <p class="text-center text-gray-400 dark:text-gray-500 text-sm mt-3">No data for the selected filters.</p>
+                    @endif
                 </div>
             </div>
 
