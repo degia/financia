@@ -100,6 +100,26 @@
                         <x-input-error :messages="$errors->get('date')" class="mt-2" />
                     </div>
 
+                    <div class="mb-4" x-data="{ recurring: {{ old('is_recurring') ? 'true' : 'false' }} }">
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" name="is_recurring" value="1" x-model="recurring"
+                                class="rounded border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 focus:ring-gray-500 dark:focus:ring-gray-400">
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Recurring Transaction</span>
+                        </label>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 ms-7">Auto-create this transaction at a regular interval.</p>
+                        <div x-show="recurring" x-cloak class="mt-3 ms-7">
+                            <select name="recurring_interval" class="block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 rounded-md shadow-sm text-sm focus:border-gray-500 dark:focus:border-gray-400 focus:ring-gray-500 dark:focus:ring-gray-400">
+                                <option value="">Select interval...</option>
+                                <option value="daily" {{ old('recurring_interval') == 'daily' ? 'selected' : '' }}>Daily</option>
+                                <option value="weekly" {{ old('recurring_interval') == 'weekly' ? 'selected' : '' }}>Weekly</option>
+                                <option value="monthly" {{ old('recurring_interval') == 'monthly' ? 'selected' : '' }}>Monthly</option>
+                                <option value="yearly" {{ old('recurring_interval') == 'yearly' ? 'selected' : '' }}>Yearly</option>
+                            </select>
+                            <x-input-error :messages="$errors->get('recurring_interval')" class="mt-2" />
+                        </div>
+                        <x-input-error :messages="$errors->get('is_recurring')" class="mt-2" />
+                    </div>
+
                     <div class="mb-4" x-show="transactionType === 'expense'" x-cloak>
                         <x-input-label for="loan_id" :value="__('Loan Payment')" />
                         <select id="loan_id" name="loan_id" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 rounded-md shadow-sm focus:border-gray-500 dark:focus:border-gray-400 focus:ring-gray-500 dark:focus:ring-gray-400">

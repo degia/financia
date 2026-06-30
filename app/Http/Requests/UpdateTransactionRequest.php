@@ -22,6 +22,8 @@ class UpdateTransactionRequest extends FormRequest
             'description' => ['nullable', 'string', 'max:255'],
             'date' => ['required', 'date'],
             'loan_id' => ['nullable', 'exists:loans,id'],
+            'is_recurring' => ['nullable', 'boolean'],
+            'recurring_interval' => ['nullable', 'required_with:is_recurring', 'string', 'in:daily,weekly,monthly,yearly'],
         ];
     }
 }

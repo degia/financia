@@ -41,6 +41,9 @@ class TransactionController extends Controller
         if ($request->filled('search')) {
             $query->where('description', 'like', '%' . $request->search . '%');
         }
+        if ($request->filled('is_recurring')) {
+            $query->where('is_recurring', true);
+        }
 
         $transactions = $query->paginate(15);
         $accounts = $request->user()->accounts;
@@ -58,17 +61,14 @@ class TransactionController extends Controller
 
     public function store(StoreTransactionRequest $request): RedirectResponse
     {
-        $this->transactionService->createTransaction([
-            'user_id' => $request->user()->id,
-            'account_id' => $request->account_id,
-            'category_id' => $request->category_id,
-            'sub_category_id' => $request->sub_category_id,
-            'amount' => $request->amount,
-            'type' => $request->type,
-            'description' => $request->description,
-            'date' => $request->date,
-            'loan_id' => $request->loan_id,
-        ]);
+        $data = $request->validated();
+        $data['user_id'] = $request->user()->id;
+        $data['is_recurring'] = $request->boolean('is_recurring');
+        if (!$data['is_recurring']) {
+            $data['recurring_interval'] = null;
+        }
+
+        $this->transactionService->createTransaction($data);
 
         return redirect()->route('transactions.index')->with('success', 'Transaction created successfully.');
     }

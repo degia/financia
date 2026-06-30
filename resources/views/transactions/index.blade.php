@@ -51,6 +51,13 @@
                         <x-input-label for="search" :value="__('Search')" />
                         <x-text-input id="search" type="text" name="search" :value="request('search')" placeholder="Description..." class="mt-1" />
                     </div>
+                    <div>
+                        <x-input-label for="is_recurring" :value="__('Recurring')" />
+                        <select id="is_recurring" name="is_recurring" class="mt-1 border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 rounded-md shadow-sm focus:border-gray-500 dark:focus:border-gray-400 focus:ring-gray-500 dark:focus:ring-gray-400">
+                            <option value="">All</option>
+                            <option value="1" {{ request('is_recurring') == '1' ? 'selected' : '' }}>Recurring Templates</option>
+                        </select>
+                    </div>
                     <div class="flex gap-2">
                         <x-primary-button class="px-4 py-2 text-sm">Filter</x-primary-button>
                         <a href="{{ route('transactions.index') }}" class="btn-secondary">Clear</a>
@@ -80,7 +87,14 @@
                             @foreach ($transactions as $transaction)
                                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                                     <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">{{ $transaction->date->format('M d, Y') }}</td>
-                                    <td class="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white">{{ $transaction->description ?: '-' }}</td>
+                                    <td class="px-4 py-3 text-sm font-medium text-gray-900 dark:text-white">
+                                        {{ $transaction->description ?: '-' }}
+                                        @if ($transaction->is_recurring)
+                                            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 ml-1">
+                                                {{ $transaction->recurring_interval ? ucfirst($transaction->recurring_interval) : 'Recurring' }}
+                                            </span>
+                                        @endif
+                                    </td>
                                     <td class="px-4 py-3">
                                         <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium" style="background-color: {{ $transaction->category->color ?? '#6B7280' }}20; color: {{ $transaction->category->color ?? '#6B7280' }}">
                                             {{ $transaction->category->name }}

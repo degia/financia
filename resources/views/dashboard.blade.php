@@ -301,7 +301,14 @@
                         @foreach ($recentTransactions as $t)
                             <div class="flex justify-between items-center py-3">
                                 <div>
-                                    <p class="text-sm font-medium text-gray-900 dark:text-white">{{ $t->description ?: $t->category->name }}</p>
+                                    <p class="text-sm font-medium text-gray-900 dark:text-white">
+                                        {{ $t->description ?: $t->category->name }}
+                                        @if ($t->is_recurring)
+                                            <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 ml-1">
+                                                {{ $t->recurring_interval ? ucfirst($t->recurring_interval) : 'Recurring' }}
+                                            </span>
+                                        @endif
+                                    </p>
                                     <p class="text-xs text-gray-500 dark:text-gray-400">{{ $t->date->format('M d, Y') }} · {{ $t->account->name }}</p>
                                 </div>
                                 <span class="text-sm font-bold {{ $t->transfer_id ? ($t->is_savings ? 'text-purple-600 dark:text-purple-400' : 'text-gray-500') : ($t->type === 'income' ? 'text-green-600' : 'text-red-600') }}">
