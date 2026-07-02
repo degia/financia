@@ -90,19 +90,85 @@
                 {{-- WhatsApp Notification --}}
                 <div class="card p-6 mb-6">
                     <h3 class="font-semibold text-gray-900 dark:text-white mb-4">WhatsApp Daily Report</h3>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Kirim laporan keuangan harian otomatis ke WhatsApp setiap pukul 07:00 via <a href="https://fonnte.com" target="_blank" class="underline hover:text-gray-700 dark:hover:text-gray-300">Fonnte</a>.</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Kirim laporan keuangan harian otomatis ke WhatsApp via <a href="https://fonnte.com" target="_blank" class="underline hover:text-gray-700 dark:hover:text-gray-300">Fonnte</a>.</p>
 
-                    <div class="mb-4">
-                        <x-input-label for="fonnte_token" :value="__('Fonnte Token')" />
-                        <x-text-input id="fonnte_token" class="block mt-1 w-full" type="password" name="fonnte_token" :value="old('fonnte_token', Auth::user()->preference('fonnte_token'))" placeholder="Masukkan token dari fonnte.com" />
-                        <x-input-error :messages="$errors->get('fonnte_token')" class="mt-2" />
+                    @php
+                        $waTime = old('whatsapp_time', Auth::user()->preference('whatsapp_time', '07:00'));
+                        $waSections = old('whatsapp_sections', Auth::user()->preference('whatsapp_sections', ['income', 'expense', 'categories', 'accounts', 'net']));
+                    @endphp
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <x-input-label for="fonnte_token" :value="__('Fonnte Token')" />
+                            <x-text-input id="fonnte_token" class="block mt-1 w-full" type="password" name="fonnte_token" :value="old('fonnte_token', Auth::user()->preference('fonnte_token'))" placeholder="Masukkan token dari fonnte.com" />
+                            <x-input-error :messages="$errors->get('fonnte_token')" class="mt-2" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="whatsapp_target" :value="__('WhatsApp Number')" />
+                            <x-text-input id="whatsapp_target" class="block mt-1 w-full" type="text" name="whatsapp_target" :value="old('whatsapp_target', Auth::user()->preference('whatsapp_target'))" placeholder="62812xxxx" />
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Kode negara 62. Contoh: 628123456789</p>
+                            <x-input-error :messages="$errors->get('whatsapp_target')" class="mt-2" />
+                        </div>
                     </div>
 
                     <div class="mb-4">
-                        <x-input-label for="whatsapp_target" :value="__('WhatsApp Number')" />
-                        <x-text-input id="whatsapp_target" class="block mt-1 w-full" type="text" name="whatsapp_target" :value="old('whatsapp_target', Auth::user()->preference('whatsapp_target'))" placeholder="62812xxxx" />
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Nomor tujuan dengan kode negara (62). Contoh: 628123456789</p>
-                        <x-input-error :messages="$errors->get('whatsapp_target')" class="mt-2" />
+                        <x-input-label for="whatsapp_time" :value="__('Send Time')" />
+                        <x-text-input id="whatsapp_time" class="block mt-1 w-full max-w-[140px]" type="time" name="whatsapp_time" :value="$waTime" />
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Laporan akan dikirim otomatis setiap hari pada jam ini.</p>
+                        <x-input-error :messages="$errors->get('whatsapp_time')" class="mt-2" />
+                    </div>
+
+                    <div class="mb-4">
+                        <x-input-label :value="__('Report Sections')" />
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Pilih bagian yang ingin ditampilkan di laporan:</p>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                            <label class="flex items-center gap-2 cursor-pointer text-sm">
+                                <input type="checkbox" name="whatsapp_sections[]" value="income"
+                                    {{ in_array('income', $waSections) ? 'checked' : '' }}
+                                    class="rounded border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 focus:ring-gray-500 dark:focus:ring-gray-400">
+                                💵 Pemasukan
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer text-sm">
+                                <input type="checkbox" name="whatsapp_sections[]" value="expense"
+                                    {{ in_array('expense', $waSections) ? 'checked' : '' }}
+                                    class="rounded border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 focus:ring-gray-500 dark:focus:ring-gray-400">
+                                💳 Pengeluaran
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer text-sm">
+                                <input type="checkbox" name="whatsapp_sections[]" value="categories"
+                                    {{ in_array('categories', $waSections) ? 'checked' : '' }}
+                                    class="rounded border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 focus:ring-gray-500 dark:focus:ring-gray-400">
+                                📂 Rincian Kategori
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer text-sm">
+                                <input type="checkbox" name="whatsapp_sections[]" value="net"
+                                    {{ in_array('net', $waSections) ? 'checked' : '' }}
+                                    class="rounded border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 focus:ring-gray-500 dark:focus:ring-gray-400">
+                                📊 Net / Selisih
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer text-sm">
+                                <input type="checkbox" name="whatsapp_sections[]" value="accounts"
+                                    {{ in_array('accounts', $waSections) ? 'checked' : '' }}
+                                    class="rounded border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 focus:ring-gray-500 dark:focus:ring-gray-400">
+                                💰 Saldo Akun
+                            </label>
+                        </div>
+                        <x-input-error :messages="$errors->get('whatsapp_sections')" class="mt-2" />
+                    </div>
+
+                    <div class="mb-4">
+                        <x-input-label for="whatsapp_custom_header" :value="__('Custom Header (optional)')" />
+                        <textarea id="whatsapp_custom_header" name="whatsapp_custom_header" rows="2" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 rounded-md shadow-sm focus:border-gray-500 dark:focus:border-gray-400 focus:ring-gray-500 dark:focus:ring-gray-400" placeholder="Contoh: Selamat pagi! Berikut laporan keuangan hari ini...">{{ old('whatsapp_custom_header', Auth::user()->preference('whatsapp_custom_header')) }}</textarea>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Teks tambahan di bagian atas laporan (maks 500 karakter).</p>
+                        <x-input-error :messages="$errors->get('whatsapp_custom_header')" class="mt-2" />
+                    </div>
+
+                    <div class="mb-4">
+                        <x-input-label for="whatsapp_custom_footer" :value="__('Custom Footer (optional)')" />
+                        <textarea id="whatsapp_custom_footer" name="whatsapp_custom_footer" rows="2" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 rounded-md shadow-sm focus:border-gray-500 dark:focus:border-gray-400 focus:ring-gray-500 dark:focus:ring-gray-400" placeholder="Contoh: Jangan lupa catat pengeluaran hari ini ya!">{{ old('whatsapp_custom_footer', Auth::user()->preference('whatsapp_custom_footer')) }}</textarea>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Teks tambahan di bagian bawah laporan (maks 500 karakter).</p>
+                        <x-input-error :messages="$errors->get('whatsapp_custom_footer')" class="mt-2" />
                     </div>
                 </div>
 

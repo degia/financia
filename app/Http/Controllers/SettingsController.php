@@ -51,6 +51,11 @@ class SettingsController extends Controller
             }],
             'fonnte_token' => ['nullable', 'string', 'max:255'],
             'whatsapp_target' => ['nullable', 'string', 'max:20', 'regex:/^62\d{8,15}$/'],
+            'whatsapp_time' => ['nullable', 'string', 'regex:/^([01]\d|2[0-3]):[0-5]\d$/'],
+            'whatsapp_sections' => ['nullable', 'array'],
+            'whatsapp_sections.*' => ['string', 'in:income,expense,categories,accounts,net'],
+            'whatsapp_custom_header' => ['nullable', 'string', 'max:500'],
+            'whatsapp_custom_footer' => ['nullable', 'string', 'max:500'],
         ]);
 
         $user->currency_preference = $request->currency_preference;
@@ -66,6 +71,10 @@ class SettingsController extends Controller
         $user->setPreference('default_income_category_id', $request->default_income_category_id);
         $user->setPreference('fonnte_token', $request->fonnte_token);
         $user->setPreference('whatsapp_target', $request->whatsapp_target);
+        $user->setPreference('whatsapp_time', $request->whatsapp_time ?? '07:00');
+        $user->setPreference('whatsapp_sections', $request->whatsapp_sections ?? ['income', 'expense', 'categories', 'accounts', 'net']);
+        $user->setPreference('whatsapp_custom_header', $request->whatsapp_custom_header);
+        $user->setPreference('whatsapp_custom_footer', $request->whatsapp_custom_footer);
 
         $user->save();
 
