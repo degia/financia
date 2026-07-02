@@ -87,6 +87,25 @@
                     </div>
                 </div>
 
+                {{-- WhatsApp Notification --}}
+                <div class="card p-6 mb-6">
+                    <h3 class="font-semibold text-gray-900 dark:text-white mb-4">WhatsApp Daily Report</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Kirim laporan keuangan harian otomatis ke WhatsApp setiap pukul 07:00 via <a href="https://fonnte.com" target="_blank" class="underline hover:text-gray-700 dark:hover:text-gray-300">Fonnte</a>.</p>
+
+                    <div class="mb-4">
+                        <x-input-label for="fonnte_token" :value="__('Fonnte Token')" />
+                        <x-text-input id="fonnte_token" class="block mt-1 w-full" type="password" name="fonnte_token" :value="old('fonnte_token', Auth::user()->preference('fonnte_token'))" placeholder="Masukkan token dari fonnte.com" />
+                        <x-input-error :messages="$errors->get('fonnte_token')" class="mt-2" />
+                    </div>
+
+                    <div class="mb-4">
+                        <x-input-label for="whatsapp_target" :value="__('WhatsApp Number')" />
+                        <x-text-input id="whatsapp_target" class="block mt-1 w-full" type="text" name="whatsapp_target" :value="old('whatsapp_target', Auth::user()->preference('whatsapp_target'))" placeholder="62812xxxx" />
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Nomor tujuan dengan kode negara (62). Contoh: 628123456789</p>
+                        <x-input-error :messages="$errors->get('whatsapp_target')" class="mt-2" />
+                    </div>
+                </div>
+
                 <div class="flex items-center gap-4">
                     <x-primary-button>{{ __('Save Settings') }}</x-primary-button>
                 </div>

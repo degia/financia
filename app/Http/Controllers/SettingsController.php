@@ -49,6 +49,8 @@ class SettingsController extends Controller
                     $fail('The selected category is invalid.');
                 }
             }],
+            'fonnte_token' => ['nullable', 'string', 'max:255'],
+            'whatsapp_target' => ['nullable', 'string', 'max:20', 'regex:/^62\d{8,15}$/'],
         ]);
 
         $user->currency_preference = $request->currency_preference;
@@ -62,6 +64,8 @@ class SettingsController extends Controller
         $user->setPreference('default_account_id', $request->default_account_id);
         $user->setPreference('default_expense_category_id', $request->default_expense_category_id);
         $user->setPreference('default_income_category_id', $request->default_income_category_id);
+        $user->setPreference('fonnte_token', $request->fonnte_token);
+        $user->setPreference('whatsapp_target', $request->whatsapp_target);
 
         $user->save();
 

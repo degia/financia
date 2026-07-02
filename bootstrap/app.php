@@ -12,6 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withSchedule(function (Illuminate\Console\Scheduling\Schedule $schedule): void {
         $schedule->command('transactions:process-recurring')->daily();
+        $schedule->command('report:daily-whatsapp')->dailyAt('07:00');
     })
     ->withMiddleware(function (Middleware $middleware): void {
         //
