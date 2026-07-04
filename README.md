@@ -83,6 +83,20 @@ php artisan db:seed --class=InstitutionSeeder
 php artisan storage:link
 ```
 
+### Demo Account
+
+Setelah migrasi dan seed system data, jalankan seeder demo untuk akun percobaan dengan data semua fitur:
+
+```bash
+php artisan db:seed --class=DemoDataSeeder
+```
+
+| Email | Password | Currency |
+|-------|----------|----------|
+| `demo@financia.com` | `password` | IDR (Rupiah) |
+
+Seeder ini **idempotent** — bisa dijalankan berulang tanpa duplikasi data. Menghasilkan 6 akun, 121+ transaksi (6 bulan), budget, 3 goals, dan 2 loan dengan pembayaran.
+
 ### 4. Build Frontend
 
 ```bash
