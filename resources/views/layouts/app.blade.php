@@ -9,21 +9,21 @@
 
     <title>{{ config('app.name', 'Financia') }}</title>
 
-    <link rel="icon" type="image/jpeg" href="{{ asset('icon-financiapp.jpg') }}">
+    <link rel="icon" type="image/png" href="{{ asset('icon-financiapp.png') }}">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <link rel="icon" type="image/x-icon" href="{{ asset('icon-financiapp.jpg') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('icon-financiapp.png') }}">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100 dark:bg-black">
+    <div class="min-h-screen bg-cream-100 dark:bg-navy-600">
         @include('layouts.navigation')
 
         @isset($header)
-            <header class="bg-white shadow-sm dark:bg-gray-900 dark:border-b dark:border-gray-800">
+            <header class="bg-white/80 shadow-sm dark:bg-navy-700/80 dark:border-b dark:border-navy-800">
                 <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
                     {{ $header }}
                 </div>

@@ -9,15 +9,15 @@
 
     <title>{{ config('app.name', 'Financia') }}</title>
 
-    <link rel="icon" type="image/jpeg" href="{{ asset('icon-financiapp.jpg') }}">
+    <link rel="icon" type="image/png" href="{{ asset('icon-financiapp.png') }}">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
-    <link rel="icon" type="image/x-icon" href="{{ asset('icon-financiapp.jpg') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('icon-financiapp.png') }}">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased bg-gray-100 dark:bg-gray-950">
+<body class="font-sans antialiased bg-cream-100 dark:bg-navy-600">
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
         <div class="mb-6">
             <a href="/">
@@ -26,7 +26,7 @@
         </div>
 
         <div
-            class="w-full sm:max-w-md px-6 py-6 bg-white dark:bg-gray-900 shadow-md overflow-hidden sm:rounded-lg border border-gray-200 dark:border-gray-800">
+            class="w-full sm:max-w-md px-6 py-6 bg-white dark:bg-navy-700 shadow-md overflow-hidden sm:rounded-lg border border-cream-200 dark:border-navy-800">
             {{ $slot }}
         </div>
 
@@ -35,7 +35,7 @@
     </div>
 
     <button @click="toggle"
-        class="fixed top-4 right-4 z-50 p-2.5 rounded-xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border border-gray-200 dark:border-gray-800 shadow-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+        class="fixed top-4 right-4 z-50 p-2.5 rounded-xl bg-white/80 dark:bg-navy-700/80 backdrop-blur-md border border-cream-200 dark:border-navy-800 shadow-lg hover:bg-cream-100 dark:hover:bg-navy-800 transition-all duration-200"
         title="Toggle theme">
         <svg x-show="!isDark" class="w-5 h-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
