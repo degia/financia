@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white/80 border-b border-cream-200 dark:bg-navy-700/80 dark:border-navy-800">
+<nav x-data="{ open: false }" class="bg-white/80 border-b border-cream-200 dark:bg-gradient-to-br dark:from-[#160B40]/75 dark:to-[#0A2A5C]/75 dark:border-navy-800/75">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
@@ -71,7 +71,7 @@
 
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150 dark:bg-navy-700 dark:text-gray-400 dark:hover:text-white">
+                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150 dark:bg-gradient-to-br dark:from-[#160B40]/75 dark:to-[#0A2A5C]/75 dark:text-gray-400 dark:hover:text-white">
                             <div>{{ Auth::user()->name }}</div>
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

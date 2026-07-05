@@ -26,7 +26,7 @@
         </div>
 
         <div
-            class="w-full sm:max-w-md px-6 py-6 bg-white dark:bg-navy-700 shadow-md overflow-hidden sm:rounded-lg border border-cream-200 dark:border-navy-800">
+            class="w-full sm:max-w-md px-6 py-6 bg-white dark:bg-gradient-to-br dark:from-[#160B40]/75 dark:to-[#0A2A5C]/75 shadow-md overflow-hidden sm:rounded-lg border border-cream-200 dark:border-navy-800/75">
             {{ $slot }}
         </div>
 
@@ -35,7 +35,7 @@
     </div>
 
     <button @click="toggle"
-        class="fixed top-4 right-4 z-50 p-2.5 rounded-xl bg-white/80 dark:bg-navy-700/80 backdrop-blur-md border border-cream-200 dark:border-navy-800 shadow-lg hover:bg-cream-100 dark:hover:bg-navy-800 transition-all duration-200"
+        class="fixed top-4 right-4 z-50 p-2.5 rounded-xl bg-white/80 dark:bg-gradient-to-br dark:from-[#160B40]/75 dark:to-[#0A2A5C]/75 backdrop-blur-md border border-cream-200 dark:border-navy-800/75 shadow-lg hover:bg-cream-100 dark:hover:bg-navy-800 transition-all duration-200"
         title="Toggle theme">
         <svg x-show="!isDark" class="w-5 h-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

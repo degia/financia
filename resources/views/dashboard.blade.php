@@ -108,7 +108,7 @@
 
                 {{-- Settings Panel --}}
                 <div x-show="showSettings" x-cloak class="card p-4 mb-4">
-                    <p class="text-xs font-medium text-gray-700 dark:text-gray-300 mb-3">Drag cards to reorder. Toggle
+                    <p class="text-xs font-medium text-gray-700 dark:text-gray-200 mb-3">Drag cards to reorder. Toggle
                         visibility.</p>
                     <div class="space-y-2">
                         <template x-for="(id, idx) in order" :key="id">
