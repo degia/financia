@@ -56,6 +56,10 @@ class SettingsController extends Controller
             'whatsapp_sections.*' => ['string', 'in:income,expense,categories,accounts,net'],
             'whatsapp_custom_header' => ['nullable', 'string', 'max:500'],
             'whatsapp_custom_footer' => ['nullable', 'string', 'max:500'],
+            'email_report_enabled' => ['nullable', 'boolean'],
+            'email_report_time' => ['nullable', 'string', 'regex:/^([01]\d|2[0-3]):[0-5]\d$/'],
+            'email_report_sections' => ['nullable', 'array'],
+            'email_report_sections.*' => ['string', 'in:income,expense,net,categories,accounts,transactions,budgets'],
         ]);
 
         $user->currency_preference = $request->currency_preference;
@@ -75,6 +79,9 @@ class SettingsController extends Controller
         $user->setPreference('whatsapp_sections', $request->whatsapp_sections ?? ['income', 'expense', 'categories', 'accounts', 'net']);
         $user->setPreference('whatsapp_custom_header', $request->whatsapp_custom_header);
         $user->setPreference('whatsapp_custom_footer', $request->whatsapp_custom_footer);
+        $user->setPreference('email_report_enabled', $request->boolean('email_report_enabled'));
+        $user->setPreference('email_report_time', $request->email_report_time ?? '07:00');
+        $user->setPreference('email_report_sections', $request->email_report_sections ?? ['income', 'expense', 'net', 'categories', 'accounts', 'transactions', 'budgets']);
 
         $user->save();
 

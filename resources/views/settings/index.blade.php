@@ -172,6 +172,84 @@
                     </div>
                 </div>
 
+                {{-- Email Daily Report --}}
+                <div class="card p-6 mb-6">
+                    <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Email Daily Report</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Receive an automated daily financial report via email.</p>
+
+                    @php
+                        $emailEnabled = old('email_report_enabled', Auth::user()->preference('email_report_enabled', false));
+                        $emailTime = old('email_report_time', Auth::user()->preference('email_report_time', '07:00'));
+                        $emailSections = old('email_report_sections', Auth::user()->preference('email_report_sections', ['income', 'expense', 'net', 'categories', 'accounts', 'transactions', 'budgets']));
+                    @endphp
+
+                    <div class="mb-4">
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" name="email_report_enabled" value="1"
+                                class="rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm focus:ring-gray-500 dark:focus:ring-gray-400"
+                                {{ $emailEnabled ? 'checked' : '' }}>
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Enable daily email report</span>
+                        </label>
+                    </div>
+
+                    <div class="mb-4">
+                        <x-input-label for="email_report_time" :value="__('Send Time')" />
+                        <x-text-input id="email_report_time" class="block mt-1 w-full max-w-[140px]" type="time" name="email_report_time" :value="$emailTime" />
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Report will be sent daily at this time.</p>
+                        <x-input-error :messages="$errors->get('email_report_time')" class="mt-2" />
+                    </div>
+
+                    <div class="mb-4">
+                        <x-input-label :value="__('Report Sections')" />
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Select sections to include in the email:</p>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                            <label class="flex items-center gap-2 cursor-pointer text-sm">
+                                <input type="checkbox" name="email_report_sections[]" value="income"
+                                    {{ in_array('income', $emailSections) ? 'checked' : '' }}
+                                    class="rounded border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 focus:ring-gray-500 dark:focus:ring-gray-400">
+                                Income
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer text-sm">
+                                <input type="checkbox" name="email_report_sections[]" value="expense"
+                                    {{ in_array('expense', $emailSections) ? 'checked' : '' }}
+                                    class="rounded border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 focus:ring-gray-500 dark:focus:ring-gray-400">
+                                Expense
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer text-sm">
+                                <input type="checkbox" name="email_report_sections[]" value="net"
+                                    {{ in_array('net', $emailSections) ? 'checked' : '' }}
+                                    class="rounded border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 focus:ring-gray-500 dark:focus:ring-gray-400">
+                                Net
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer text-sm">
+                                <input type="checkbox" name="email_report_sections[]" value="categories"
+                                    {{ in_array('categories', $emailSections) ? 'checked' : '' }}
+                                    class="rounded border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 focus:ring-gray-500 dark:focus:ring-gray-400">
+                                Categories
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer text-sm">
+                                <input type="checkbox" name="email_report_sections[]" value="accounts"
+                                    {{ in_array('accounts', $emailSections) ? 'checked' : '' }}
+                                    class="rounded border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 focus:ring-gray-500 dark:focus:ring-gray-400">
+                                Accounts
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer text-sm">
+                                <input type="checkbox" name="email_report_sections[]" value="transactions"
+                                    {{ in_array('transactions', $emailSections) ? 'checked' : '' }}
+                                    class="rounded border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 focus:ring-gray-500 dark:focus:ring-gray-400">
+                                Transactions
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer text-sm">
+                                <input type="checkbox" name="email_report_sections[]" value="budgets"
+                                    {{ in_array('budgets', $emailSections) ? 'checked' : '' }}
+                                    class="rounded border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 focus:ring-gray-500 dark:focus:ring-gray-400">
+                                Budgets
+                            </label>
+                        </div>
+                        <x-input-error :messages="$errors->get('email_report_sections')" class="mt-2" />
+                    </div>
+                </div>
+
                 <div class="flex items-center gap-4">
                     <x-primary-button>{{ __('Save Settings') }}</x-primary-button>
                 </div>
