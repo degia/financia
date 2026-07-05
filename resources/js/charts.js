@@ -1,5 +1,13 @@
 import Chart from 'chart.js/auto';
 
+function isDark() {
+    return document.documentElement.classList.contains('dark');
+}
+
+function tickColor() {
+    return isDark() ? '#e0f2fe' : undefined;
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const monthlyCanvas = document.getElementById('monthlyChart');
     if (monthlyCanvas) {
@@ -52,10 +60,16 @@ function initMonthlyChart(ctx, labels, income, expense) {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { position: 'top' },
+                legend: { position: 'top', labels: { color: tickColor() } },
             },
             scales: {
-                y: { beginAtZero: true },
+                y: {
+                    beginAtZero: true,
+                    ticks: { color: tickColor() },
+                },
+                x: {
+                    ticks: { color: tickColor() },
+                },
             },
         },
     });
@@ -101,10 +115,11 @@ function initDailyChart(ctx, labels, income, expense) {
             scales: {
                 x: {
                     grid: { display: false },
-                    ticks: { maxTicksLimit: 31 },
+                    ticks: { maxTicksLimit: 31, color: tickColor() },
                 },
                 y: {
                     beginAtZero: true,
+                    ticks: { color: tickColor() },
                 },
             },
         },
@@ -128,7 +143,7 @@ function initCategoryChart(ctx, labels, data, colors) {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { position: 'right' },
+                legend: { position: 'right', labels: { color: tickColor() } },
             },
         },
     });

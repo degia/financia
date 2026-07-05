@@ -11,10 +11,18 @@
 
                     <div class="mb-4">
                         <x-input-label for="from_account_id" :value="__('From Account')" />
-                        <select id="from_account_id" name="from_account_id" class="input-field mt-1" required>
+                        <select id="from_account_id" name="from_account_id"
+                            x-data="{ focused: false }"
+                            @focus="focused = true"
+                            @blur="focused = false"
+                            :class="{ 'ring-2 ring-navy-500/50 scale-[1.02] shadow-lg dark:shadow-black/30': focused }"
+                            class="input-field mt-1 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-400 dark:focus:border-gray-400 transition-all duration-300 ease-in-out"
+                            style="animation: slide-fade 0.5s ease-out both"
+                            required>
                             <option value="">Select source account...</option>
                             @foreach ($accounts as $account)
-                                <option value="{{ $account->id }}" {{ old('from_account_id') == $account->id ? 'selected' : '' }}>
+                                <option value="{{ $account->id }}"
+                                    {{ old('from_account_id') == $account->id ? 'selected' : '' }}>
                                     {{ $account->name }} ({{ number_format($account->current_balance, 2) }})
                                 </option>
                             @endforeach
@@ -24,10 +32,18 @@
 
                     <div class="mb-4">
                         <x-input-label for="to_account_id" :value="__('To Account')" />
-                        <select id="to_account_id" name="to_account_id" class="input-field mt-1" required>
+                        <select id="to_account_id" name="to_account_id"
+                            x-data="{ focused: false }"
+                            @focus="focused = true"
+                            @blur="focused = false"
+                            :class="{ 'ring-2 ring-navy-500/50 scale-[1.02] shadow-lg dark:shadow-black/30': focused }"
+                            class="input-field mt-1 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-400 dark:focus:border-gray-400 transition-all duration-300 ease-in-out"
+                            style="animation: slide-fade 0.5s ease-out 0.25s both"
+                            required>
                             <option value="">Select destination account...</option>
                             @foreach ($accounts as $account)
-                                <option value="{{ $account->id }}" {{ old('to_account_id') == $account->id ? 'selected' : '' }}>
+                                <option value="{{ $account->id }}"
+                                    {{ old('to_account_id') == $account->id ? 'selected' : '' }}>
                                     {{ $account->name }} ({{ number_format($account->current_balance, 2) }})
                                 </option>
                             @endforeach
@@ -37,29 +53,35 @@
 
                     <div class="mb-4">
                         <x-input-label for="amount" :value="__('Amount')" />
-                        <x-text-input id="amount" class="input-field mt-1" type="number" step="0.01" min="0.01" name="amount" :value="old('amount')" required placeholder="0.00" />
+                        <x-text-input id="amount" class="input-field mt-1" type="number" step="0.01"
+                            min="0.01" name="amount" :value="old('amount')" required placeholder="0.00" />
                         <x-input-error :messages="$errors->get('amount')" class="mt-2" />
                     </div>
 
                     <div class="mb-4">
                         <x-input-label for="description" :value="__('Description (optional)')" />
-                        <x-text-input id="description" class="input-field mt-1" type="text" name="description" :value="old('description')" placeholder="e.g. Monthly savings" />
+                        <x-text-input id="description" class="input-field mt-1" type="text" name="description"
+                            :value="old('description')" placeholder="e.g. Monthly savings" />
                         <x-input-error :messages="$errors->get('description')" class="mt-2" />
                     </div>
 
                     <div class="mb-4">
                         <x-input-label for="date" :value="__('Date')" />
-                        <x-text-input id="date" class="input-field mt-1" type="date" name="date" :value="old('date', now()->format('Y-m-d'))" />
+                        <x-text-input id="date" class="input-field mt-1" type="date" name="date"
+                            :value="old('date', now()->format('Y-m-d'))" />
                         <x-input-error :messages="$errors->get('date')" class="mt-2" />
                     </div>
 
                     <div class="mb-4">
                         <label class="inline-flex items-center gap-3 cursor-pointer">
-                            <input type="checkbox" name="is_savings" value="1" {{ old('is_savings') ? 'checked' : '' }}
+                            <input type="checkbox" name="is_savings" value="1"
+                                {{ old('is_savings') ? 'checked' : '' }}
                                 class="w-5 h-5 rounded border-gray-300 dark:border-gray-700 text-gray-900 focus:ring-gray-500 dark:focus:ring-gray-400 dark:bg-gray-800">
                             <div>
-                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Treat as savings expense</span>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">This transfer will be recorded as an expense for budgeting purposes.</p>
+                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Treat as savings
+                                    expense</span>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">This transfer will be recorded as an
+                                    expense for budgeting purposes.</p>
                             </div>
                         </label>
                     </div>
@@ -68,7 +90,8 @@
                         <button type="submit" class="btn-primary">
                             {{ __('Transfer') }}
                         </button>
-                        <a href="{{ route('transactions.index') }}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm">Cancel</a>
+                        <a href="{{ route('transactions.index') }}"
+                            class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm">Cancel</a>
                     </div>
                 </form>
             </div>

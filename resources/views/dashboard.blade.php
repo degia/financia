@@ -48,7 +48,7 @@
     </x-slot>
 
     <div class="py-6">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-sky-100">
             {{-- Summary Cards - Drag & Drop Reorderable --}}
             @php
                 $cards = [
@@ -62,14 +62,14 @@
                     'income' => [
                         'label' => 'Income (' . Carbon\Carbon::create()->month($month)->format('M') . ')',
                         'value' => '+' . number_format($summary['monthlyIncome'], 2),
-                        'sub' => '',
+                        'sub' => 'Income this month',
                         'color' => 'text-green-600',
                         'border' => '',
                     ],
                     'expense' => [
                         'label' => 'Expense (' . Carbon\Carbon::create()->month($month)->format('M') . ')',
                         'value' => '-' . number_format($summary['monthlyExpense'], 2),
-                        'sub' => '',
+                        'sub' => 'Expense this month',
                         'color' => 'text-red-600',
                         'border' => '',
                     ],
@@ -142,10 +142,10 @@
                         <div x-show="!hidden.includes(id)" x-cloak class="card p-3 border-l-4 transition"
                             :class="cardsData[id].border || ''" draggable="true" @dragstart="dragStart($event, idx)"
                             @dragover.prevent="dragOver($event, idx)" @dragend="dragEnd()">
-                            <p class="text-[11px] text-gray-500 dark:text-gray-400 mb-0.5" x-text="cardsData[id].label">
+                            <p class="text-[11px] mb-0.5" x-text="cardsData[id].label">
                             </p>
                             <p class="text-lg font-bold" :class="cardsData[id].color" x-text="cardsData[id].value"></p>
-                            <p x-show="cardsData[id].sub" class="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5"
+                            <p x-show="cardsData[id].sub" class="text-[10px] text-gray-400 dark:text-sky-200 mt-0.5"
                                 x-text="cardsData[id].sub"></p>
                         </div>
                     </template>
