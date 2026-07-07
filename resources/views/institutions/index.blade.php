@@ -44,11 +44,11 @@
                                         <span class="text-xs text-gray-400 ml-1">(inactive)</span>
                                     @endif
                                 </div>
-                                <div class="flex gap-2 mt-1">
-                                    <a href="{{ route('institutions.edit', $inst) }}" class="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white underline">Edit</a>
+                                <div class="flex gap-3 mt-1">
+                                    <a href="{{ route('institutions.edit', $inst) }}" class="text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">Edit</a>
                                     <form method="POST" action="{{ route('institutions.destroy', $inst) }}" onsubmit="return confirm('Delete this institution?')">
                                         @csrf @method('DELETE')
-                                        <button type="submit" class="text-xs text-red-500 hover:text-red-700 underline">Delete</button>
+                                        <button type="submit" class="text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors">Delete</button>
                                     </form>
                                 </div>
                             </div>
