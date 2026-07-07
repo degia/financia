@@ -29,26 +29,48 @@
                     @foreach ($institutions as $inst)
                         <div class="card p-4 hover:shadow-md dark:hover:border-gray-700 transition-all">
                             <div class="flex flex-col items-center text-center gap-3">
-                                <svg width="56" height="56" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                                    <rect width="40" height="40" rx="8" fill="{{ $inst->color }}"/>
-                                    <text x="20" y="27" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold" font-family="Arial,sans-serif">{{ substr($inst->name, 0, 2) }}</text>
+                                <svg width="56" height="56" viewBox="0 0 40 40"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="40" height="40" rx="8" fill="{{ $inst->color }}" />
+                                    <text x="20" y="27" text-anchor="middle" fill="#fff" font-size="14"
+                                        font-weight="bold"
+                                        font-family="Arial,sans-serif">{{ substr($inst->name, 0, 2) }}</text>
                                 </svg>
                                 <div>
-                                    <h3 class="font-semibold text-gray-900 dark:text-white text-sm">{{ $inst->name }}</h3>
+                                    <h3 class="font-semibold text-gray-900 dark:text-white text-sm">{{ $inst->name }}
+                                    </h3>
                                     @php
-                                        $labels = ['cash'=>'Cash','bank'=>'Bank Account','ewallet'=>'E-Wallet','credit_card'=>'Credit Card','savings'=>'Savings','other'=>'Other'];
-                                        $colors = ['cash'=>'text-green-600','bank'=>'text-blue-600','ewallet'=>'text-orange-600','credit_card'=>'text-red-600','savings'=>'text-violet-600','other'=>'text-gray-500'];
+                                        $labels = [
+                                            'cash' => 'Cash',
+                                            'bank' => 'Bank Account',
+                                            'ewallet' => 'E-Wallet',
+                                            'credit_card' => 'Credit Card',
+                                            'savings' => 'Savings',
+                                            'other' => 'Other',
+                                        ];
+                                        $colors = [
+                                            'cash' => 'text-green-600',
+                                            'bank' => 'text-blue-600',
+                                            'ewallet' => 'text-orange-600',
+                                            'credit_card' => 'text-red-600',
+                                            'savings' => 'text-violet-600',
+                                            'other' => 'text-gray-500',
+                                        ];
                                     @endphp
-                                    <span class="text-xs font-medium {{ $colors[$inst->type] ?? 'text-gray-500' }}">{{ $labels[$inst->type] ?? $inst->type }}</span>
+                                    <span
+                                        class="text-xs font-medium {{ $colors[$inst->type] ?? 'text-gray-500' }}">{{ $labels[$inst->type] ?? $inst->type }}</span>
                                     @if (!$inst->is_active)
                                         <span class="text-xs text-gray-400 ml-1">(inactive)</span>
                                     @endif
                                 </div>
-                                <div class="flex gap-3 mt-1">
-                                    <a href="{{ route('institutions.edit', $inst) }}" class="text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">Edit</a>
-                                    <form method="POST" action="{{ route('institutions.destroy', $inst) }}" onsubmit="return confirm('Delete this institution?')">
+                                <div class="flex items-center gap-2 mt-3">
+                                    <a href="{{ route('institutions.edit', $inst) }}"
+                                        class="inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-lg bg-cream-100/20 text-gray-700 shadow-sm hover:bg-cream-100/30 hover:shadow-md hover:shadow-cream-300/30 hover:ring-2 hover:ring-cream-300/40 transition-all dark:bg-navy-800/20 dark:text-white dark:hover:bg-navy-800/30 dark:hover:shadow-navy-600/30 dark:hover:ring-navy-600/40">Edit</a>
+                                    <form method="POST" action="{{ route('institutions.destroy', $inst) }}"
+                                        onsubmit="return confirm('Delete this institution?')">
                                         @csrf @method('DELETE')
-                                        <button type="submit" class="text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors">Delete</button>
+                                        <button type="submit"
+                                            class="inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-lg bg-red-600/20 text-red-600 shadow-sm hover:bg-red-600/30 hover:shadow-md hover:shadow-red-500/30 hover:ring-2 hover:ring-red-500/40 transition-all dark:bg-red-700/20 dark:text-red-400 dark:hover:bg-red-700/30 dark:hover:shadow-red-600/30 dark:hover:ring-red-600/40">Delete</button>
                                     </form>
                                 </div>
                             </div>
