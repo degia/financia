@@ -21,7 +21,6 @@ class InstitutionFactory extends Factory
         return [
             'name' => $name,
             'type' => fake()->randomElement(['cash', 'bank', 'ewallet', 'credit_card', 'savings', 'other']),
-            'logo' => null,
             'color' => fake()->hexColor(),
             'slug' => Str::slug($name) . '-' . fake()->unique()->randomNumber(4),
             'is_active' => true,

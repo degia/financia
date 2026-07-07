@@ -146,9 +146,6 @@
                 },
 
                 renderLogo(inst) {
-                    if (inst.logo_url) {
-                        return `<img src="${inst.logo_url}" alt="${inst.name}" class="w-9 h-9 object-contain rounded-md">`;
-                    }
                     const s = inst.name.length > 3 ? inst.name.substring(0, 2) : inst.name;
                     return `<svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"><rect width="36" height="36" rx="7" fill="${inst.color}"/><text x="18" y="24" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold" font-family="Arial,sans-serif">${s}</text></svg>`;
                 },

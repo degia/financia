@@ -6,7 +6,7 @@
     <div class="py-6">
         <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="card p-6">
-                <form method="POST" action="{{ route('institutions.store') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('institutions.store') }}">
                     @csrf
 
                     <div class="mb-4">
@@ -32,13 +32,6 @@
                         <x-input-label for="color" :value="__('Brand Color')" />
                         <input id="color" type="color" name="color" value="{{ old('color', '#6366F1') }}" class="block mt-1 w-16 h-10 rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 cursor-pointer">
                         <x-input-error :messages="$errors->get('color')" class="mt-2" />
-                    </div>
-
-                    <div class="mb-4">
-                        <x-input-label for="logo" :value="__('Logo')" />
-                        <input id="logo" type="file" name="logo" accept="image/png,image/jpg,image/jpeg,image/svg+xml,image/webp" class="block mt-1 w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gray-100 dark:file:bg-gray-800 file:text-gray-700 dark:file:text-gray-300 hover:file:bg-gray-200 dark:hover:file:bg-gray-700">
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">PNG, JPG, SVG, or WebP. Max 1MB.</p>
-                        <x-input-error :messages="$errors->get('logo')" class="mt-2" />
                     </div>
 
                     <div class="flex items-center gap-4 mt-6">

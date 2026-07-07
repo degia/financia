@@ -5,7 +5,6 @@ namespace App\Models;
 use Database\Factories\InstitutionFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class Institution extends Model
 {
@@ -15,7 +14,6 @@ class Institution extends Model
     protected $fillable = [
         'name',
         'type',
-        'logo',
         'color',
         'slug',
         'is_active',
@@ -35,9 +33,6 @@ class Institution extends Model
 
     public function getLogoUrlAttribute(): ?string
     {
-        if (!$this->logo) {
-            return null;
-        }
-        return Storage::url($this->logo);
+        return null;
     }
 }

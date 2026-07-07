@@ -29,14 +29,10 @@
                     @foreach ($institutions as $inst)
                         <div class="card p-4 hover:shadow-md dark:hover:border-gray-700 transition-all">
                             <div class="flex flex-col items-center text-center gap-3">
-                                @if ($inst->logo_url)
-                                    <img src="{{ $inst->logo_url }}" alt="{{ $inst->name }}" class="w-14 h-14 object-contain rounded-lg">
-                                @else
-                                    <svg width="56" height="56" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                                        <rect width="40" height="40" rx="8" fill="{{ $inst->color }}"/>
-                                        <text x="20" y="27" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold" font-family="Arial,sans-serif">{{ substr($inst->name, 0, 2) }}</text>
-                                    </svg>
-                                @endif
+                                <svg width="56" height="56" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="40" height="40" rx="8" fill="{{ $inst->color }}"/>
+                                    <text x="20" y="27" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold" font-family="Arial,sans-serif">{{ substr($inst->name, 0, 2) }}</text>
+                                </svg>
                                 <div>
                                     <h3 class="font-semibold text-gray-900 dark:text-white text-sm">{{ $inst->name }}</h3>
                                     @php

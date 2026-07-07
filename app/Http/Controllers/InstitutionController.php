@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Institution;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -28,7 +27,6 @@ class InstitutionController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'type' => ['required', 'string', 'in:cash,bank,ewallet,credit_card,savings,other'],
             'color' => ['nullable', 'string', 'max:7'],
-            'logo' => ['nullable', 'image', 'mimes:png,jpg,jpeg,svg,webp', 'max:1024'],
         ]);
 
         $slug = Str::slug($request->name);
@@ -44,10 +42,6 @@ class InstitutionController extends Controller
             'slug' => $slug,
             'is_active' => true,
         ];
-
-        if ($request->hasFile('logo')) {
-            $data['logo'] = $request->file('logo')->store('institutions', 'public');
-        }
 
         Institution::create($data);
 
@@ -65,7 +59,6 @@ class InstitutionController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'type' => ['required', 'string', 'in:cash,bank,ewallet,credit_card,savings,other'],
             'color' => ['nullable', 'string', 'max:7'],
-            'logo' => ['nullable', 'image', 'mimes:png,jpg,jpeg,svg,webp', 'max:1024'],
             'is_active' => ['nullable', 'boolean'],
         ]);
 
@@ -76,13 +69,6 @@ class InstitutionController extends Controller
             'is_active' => $request->boolean('is_active', true),
         ];
 
-        if ($request->hasFile('logo')) {
-            if ($institution->logo) {
-                Storage::disk('public')->delete($institution->logo);
-            }
-            $data['logo'] = $request->file('logo')->store('institutions', 'public');
-        }
-
         $institution->update($data);
 
         return redirect()->route('institutions.index')->with('success', 'Institution updated successfully.');
@@ -92,10 +78,6 @@ class InstitutionController extends Controller
     {
         if ($institution->accounts()->exists()) {
             return back()->with('error', 'Cannot delete institution with linked accounts. Remove the institution from accounts first.');
-        }
-
-        if ($institution->logo) {
-            Storage::disk('public')->delete($institution->logo);
         }
 
         $institution->delete();

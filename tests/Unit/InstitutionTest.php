@@ -21,7 +21,6 @@ class InstitutionTest extends TestCase
         $this->assertEquals([
             'name',
             'type',
-            'logo',
             'color',
             'slug',
             'is_active',

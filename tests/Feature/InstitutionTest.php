@@ -6,8 +6,6 @@ use App\Models\Account;
 use App\Models\Institution;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class InstitutionTest extends TestCase
@@ -50,28 +48,6 @@ class InstitutionTest extends TestCase
             'type' => 'bank',
             'is_active' => true,
         ]);
-    }
-
-    public function test_can_store_institution_with_logo(): void
-    {
-        if (!function_exists('imagecreatetruecolor')) {
-            $this->markTestSkipped('GD extension is required for image upload tests.');
-        }
-
-        Storage::fake('public');
-        $user = User::factory()->create();
-
-        $file = UploadedFile::fake()->image('logo.png');
-
-        $response = $this->actingAs($user)->post(route('institutions.store'), [
-            'name' => 'Bank With Logo',
-            'type' => 'bank',
-            'logo' => $file,
-        ]);
-
-        $response->assertSessionHasNoErrors()->assertRedirect(route('institutions.index'));
-
-        $this->assertDatabaseHas('institutions', ['name' => 'Bank With Logo']);
     }
 
     public function test_store_validates_required_fields(): void
