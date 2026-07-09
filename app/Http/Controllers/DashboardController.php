@@ -20,6 +20,22 @@ class DashboardController extends Controller
         $year = (int) $request->get('year', now()->year);
         $selectedCategories = $request->get('categories', []);
 
+        $selectedDate = $request->get('selected_date', now()->format('Y-m-d'));
+
+        $dayIncome = (float) $user->transactions()
+            ->where('type', 'income')
+            ->whereNull('transfer_id')
+            ->whereDate('date', $selectedDate)
+            ->sum('amount');
+
+        $dayExpense = (float) $user->transactions()
+            ->where('type', 'expense')
+            ->where(function ($q) {
+                $q->whereNull('transfer_id')->orWhere('is_savings', true);
+            })
+            ->whereDate('date', $selectedDate)
+            ->sum('amount');
+
         $summary = $this->dashboardService->getSummary($user, $month, $year);
         $monthlyChart = $this->dashboardService->getMonthlyChart($user, $year);
         $dailyChart = $this->dashboardService->getDailyChart($user, $month, $year);
@@ -49,7 +65,10 @@ class DashboardController extends Controller
             'categories',
             'selectedCategories',
             'month',
-            'year'
+            'year',
+            'selectedDate',
+            'dayIncome',
+            'dayExpense',
         ));
     }
 }
