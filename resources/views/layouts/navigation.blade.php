@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-white/80 border-b border-cream-200 dark:bg-gradient-to-br dark:from-[#160B40]/75 dark:to-[#0A2A5C]/75 dark:border-navy-800/75">
+<nav x-data="{ open: false }" class="sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-cream-200 dark:bg-gradient-to-br dark:from-[#160B40]/75 dark:to-[#0A2A5C]/75 dark:border-navy-800/75">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
